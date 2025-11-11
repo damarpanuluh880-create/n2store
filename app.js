@@ -12,9 +12,14 @@
         let transaksiModal = null;
         let hutangModal = null;
         let masterDataModal = null;
+        // BARU: Menambah referensi Offcanvas riwayat hapus
+        let riwayatHapusModal = null;
 
         // Variabel untuk menyimpan data sementara saat Hapus/Edit
         let itemUntukDihapus = { type: null, id: null };
+        
+        // BARU: Variabel global untuk menampung riwayat hapus
+        let globalDeletionHistory = [];
         
         // Variabel untuk menyimpan state filter tanggal
         let globalDateFilter = {
@@ -385,19 +390,26 @@
                     .filter(t => t.tipe === 'TRX')
                     .reduce((acc, t) => acc + t.fee, 0);
 
+                // BARU: Menghitung total nominal (modal) HANYA dari tipe 'TRX'
+                const totalTrxNominal = filteredTrx
+                    .filter(t => t.tipe === 'TRX')
+                    .reduce((acc, t) => acc + t.total, 0);
+
                 setValueById('sales-laba', formatCurrency(totalLabaPenjualan));
                 setValueById('sales-qty', totalQty);
                 setValueById('sales-jasa-qty', totalJasaQty); // BARU
                 setValueById('sales-produk', formatCurrency(totalJualProduk));
                 setValueById('sales-aplikasi', formatCurrency(totalJualAplikasi));
                 setValueById('sales-jasa', formatCurrency(totalJualJasa));
-                setValueById('sales-tf', formatCurrency(totalTrxFee)); // Total Laba TRX
+                // DIUBAH: Menampilkan total nominal (modal) TRX, bukan laba
+                setValueById('sales-tf', formatCurrency(totalTrxNominal)); // Total TRX
                 
                 // 8. Kartu Sub-Penjualan (Data Penjualan Terfilter)
                 setValueById('sales-produk-h', formatCurrency(totalJualProduk));
                 setValueById('sales-jasa-h', formatCurrency(totalJualJasa));
                 setValueById('sales-apk-h', formatCurrency(totalJualAplikasi));
-                setValueById('sales-trx-h', formatCurrency(totalTrxFee)); // Total Laba TRX
+                // DIUBAH: Menampilkan total nominal (modal) TRX, bukan laba
+                setValueById('sales-trx-h', formatCurrency(totalTrxNominal)); // Total Transaksi
                 
                 // 9. Top Produk & Riwayat Penjualan (Data Penjualan Terfilter)
                 const topProduk = filteredSales
@@ -1246,6 +1258,7 @@
 
         /**
          * Logika Hapus Item (DIPERBARUI)
+         * Sekarang memindahkan item ke globalDeletionHistory
          */
         function deleteItem() {
             if (!itemUntukDihapus.type || itemUntukDihapus.id === null) return;
@@ -1269,7 +1282,19 @@
                 }
 
                 if (itemIndex > -1) {
-                    dataArray.splice(itemIndex, 1);
+                    // DIPERBAIKI: Bukan menghapus, tapi memindahkan
+                    const [deletedItem] = dataArray.splice(itemIndex, 1);
+                    
+                    if (deletedItem) {
+                        // BARU: Buat entri riwayat hapus
+                        const historyEntry = {
+                            originalType: type,
+                            deletedItem: deletedItem,
+                            deletedTimestamp: new Date().toISOString()
+                        };
+                        // BARU: Tambahkan ke array riwayat hapus (di paling atas)
+                        globalDeletionHistory.unshift(historyEntry);
+                    }
                     
                     // Render ulang list yang relevan
                     switch (type) {
@@ -1318,6 +1343,106 @@
                 // Sembunyikan modal dan reset
                 if(konfirmasiHapusModal) konfirmasiHapusModal.hide();
                 itemUntukDihapus = { type: null, id: null };
+            }
+        }
+        
+        /**
+         * BARU: Render daftar di Modal Riwayat Hapus
+         */
+        function renderDeletionHistory() {
+            const listContainer = document.getElementById('riwayat-hapus-list-container');
+            if (!listContainer) return;
+            
+            listContainer.innerHTML = '';
+
+            if (globalDeletionHistory.length === 0) {
+                listContainer.innerHTML = `
+                    <li class="list-group-item d-flex justify-content-center p-4">
+                        <span class="text-muted">Riwayat hapus kosong.</span>
+                    </li>`;
+                return;
+            }
+
+            globalDeletionHistory.forEach((entry, index) => {
+                const { originalType, deletedItem, deletedTimestamp } = entry;
+                
+                // Mendapatkan nama item (bisa objek atau string)
+                let itemName = '[Data Tidak Dikenali]';
+                if (typeof deletedItem === 'object' && deletedItem !== null) {
+                    itemName = deletedItem.nama || deletedItem.pihak || deletedItem.rincian || `Item Tipe ${originalType}`;
+                } else if (typeof deletedItem === 'string') {
+                    itemName = deletedItem;
+                }
+                
+                // Format tanggal
+                const deletedDate = new Date(deletedTimestamp).toLocaleString('id-ID', {
+                    day: '2-digit', month: 'short', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit'
+                });
+
+                listContainer.innerHTML += `
+                    <li class="list-group-item">
+                        <div class="deleted-item-info">
+                            <div>
+                                <span class="deleted-item-name">${itemName}</span>
+                                <span class="deleted-item-type">${originalType}</span>
+                            </div>
+                            <span class="deleted-item-timestamp">Dihapus: ${deletedDate}</span>
+                        </div>
+                        <button class="btn btn-sm btn-success btn-restore" onclick="restoreItem(${index})">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Pulihkan
+                        </button>
+                    </li>
+                `;
+            });
+        }
+
+        /**
+         * BARU: Logika untuk memulihkan item
+         */
+        function restoreItem(historyIndex) {
+            if (historyIndex < 0 || historyIndex >= globalDeletionHistory.length) {
+                console.error('Index riwayat hapus tidak valid');
+                return;
+            }
+            
+            try {
+                // 1. Ambil & hapus item dari riwayat hapus
+                const [restoredEntry] = globalDeletionHistory.splice(historyIndex, 1);
+                const { originalType, deletedItem } = restoredEntry;
+
+                // 2. Tentukan array tujuan
+                let targetArray;
+                if (initialHistoryData.hasOwnProperty(originalType)) {
+                    targetArray = initialHistoryData[originalType];
+                } else if (initialMasterData.hasOwnProperty(originalType)) {
+                    targetArray = initialMasterData[originalType];
+                } else {
+                    throw new Error(`Tipe data asli '${originalType}' tidak ditemukan.`);
+                }
+                
+                // 3. Kembalikan item ke array aslinya
+                if (Array.isArray(targetArray)) {
+                    // Jika riwayat (transaksi, penjualan, hutang), tambahkan ke atas (unshift)
+                    if (initialHistoryData.hasOwnProperty(originalType)) {
+                        targetArray.unshift(deletedItem);
+                    } else {
+                        // Jika master data, tambahkan ke akhir (push)
+                        targetArray.push(deletedItem);
+                    }
+                }
+
+                // 4. Render ulang seluruh aplikasi
+                renderAllMasterData();
+                renderAllHistoryPages();
+                renderDashboardAnalytics();
+                
+                // 5. Render ulang modal riwayat hapus
+                renderDeletionHistory();
+                
+            } catch (error) {
+                console.error('Gagal memulihkan item:', error);
+                alert('Terjadi kesalahan saat memulihkan item.');
             }
         }
         
@@ -2194,7 +2319,9 @@
             try {
                 const dataToSave = {
                     master: initialMasterData,
-                    history: initialHistoryData
+                    history: initialHistoryData,
+                    // BARU: Menyimpan riwayat hapus
+                    trash: globalDeletionHistory 
                 };
                 const jsonContent = JSON.stringify(dataToSave, null, 2);
                 const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
@@ -2226,6 +2353,7 @@
                 try {
                     const parsedData = JSON.parse(text);
 
+                    // DIPERBAIKI: Pengecekan menyertakan data opsional 'trash'
                     if (!parsedData.master || !parsedData.history) {
                         alert('Format file JSON tidak valid. Data "master" atau "history" tidak ditemukan.');
                         return;
@@ -2238,6 +2366,8 @@
                     // Muat data baru
                     initialMasterData = parsedData.master;
                     initialHistoryData = parsedData.history;
+                    // BARU: Memuat riwayat hapus jika ada, atau reset
+                    globalDeletionHistory = parsedData.trash || []; 
 
                     // Render ulang seluruh aplikasi
                     renderAllMasterData();
@@ -2275,6 +2405,8 @@
             transaksiModal = new bootstrap.Modal(document.getElementById('transaksiModal'));
             hutangModal = new bootstrap.Modal(document.getElementById('hutangModal'));
             masterDataModal = new bootstrap.Modal(document.getElementById('masterDataModal'));
+            // DIPERBAIKI: Inisialisasi Offcanvas riwayat hapus
+            riwayatHapusModal = new bootstrap.Offcanvas(document.getElementById('riwayatHapusModal'));
 
             const pageTitle = document.getElementById('page-title');
             const pageContents = document.querySelectorAll('.page-content');
@@ -2658,6 +2790,13 @@
                 });
                 
                 masterDataModalEl.addEventListener('hidden.bs.modal', resetMasterDataForm);
+            }
+            
+            // DIPERBAIKI: Listener untuk Offcanvas riwayat hapus
+            const riwayatHapusModalEl = document.getElementById('riwayatHapusModal');
+            if (riwayatHapusModalEl) {
+                // Saat Offcanvas akan ditampilkan, render daftarnya
+                riwayatHapusModalEl.addEventListener('show.bs.offcanvas', renderDeletionHistory);
             }
             
             // =============================================
