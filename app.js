@@ -499,15 +499,20 @@
             }
 
             hutangTeratas.forEach(item => {
-                // Perkiraan sisa hari (dummy logic, ganti jika ada tgl jatuh tempo)
-                const dateParts = item.tanggal.split('-');
-                const itemDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                const diffTime = Math.abs(new Date() - itemDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                // DIUBAH: Logika diubah dari menghitung selisih hari
+                // menjadi menampilkan tanggal dan bulan
+                const itemDate = new Date(item.tanggal + 'T00:00:00'); // Hindari masalah TZ
+                const day = itemDate.getDate();
+                // 'id-ID' untuk bulan ('Sep', 'Okt', dll.). .replace('.', '') untuk bulan 'Mei.'
+                const month = itemDate.toLocaleString('id-ID', { month: 'short' }).replace('.', ''); 
                 
                 listContainer.innerHTML += `
                     <li class="list-group-item debt-list-item px-0">
-                        <span class="debt-days">${diffDays}</span>
+                        <!-- DIUBAH: Menggunakan class baru 'debt-date-badge' dan struktur HTML baru -->
+                        <div class="debt-date-badge">
+                            <span class="day">${day}</span>
+                            <span class="month">${month}</span>
+                        </div>
                         <div class="transaction-details flex-grow-1">
                             <span class="fw-bold d-block">${item.pihak}</span>
                             <small>${item.catatan || 'Tidak ada catatan'}</small>
