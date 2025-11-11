@@ -1,0 +1,652 @@
+body {
+            padding-bottom: 70px; 
+            background-color: #f1f3f7; /* DIUBAH: Warna latar belakang */
+        }
+
+        /* BARU: Mengubah warna header */
+        header.sticky-top {
+            background-color: #040622; 
+        }
+
+        /* BARU: Menambah tinggi padding header 30% */
+        #page-title {
+            padding-top: 0.65rem;    /* 0.5rem * 1.3 */
+            padding-bottom: 0.65rem; /* 0.5rem * 1.3 */
+        }
+
+        .nav-link-icon {
+            font-size: 1.25rem; 
+            line-height: 1; 
+        }
+        .nav-link-text {
+            font-size: 0.75rem; 
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .nav-link.active {
+            color: #0d6efd !important; 
+            font-weight: bold;
+        }
+        
+        /* ======================================= */
+        /* CSS PLACEHOLDER GRAFIK (DIHAPUS)        */
+        /* ======================================= */
+        /* .custom-graph-placeholder { ... } */
+        /* .custom-graph-placeholder .grid-line { ... } */
+        /* .custom-graph-placeholder .y-axis-label { ... } */
+        /* .custom-graph-placeholder .x-axis-label { ... } */
+        
+        /* BARU: Style untuk legenda grafik */
+        .graph-legend {
+            margin-top: 1.5rem; 
+            font-size: 0.8rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 1rem;
+        }
+        .legend-color-box {
+            width: 15px;
+            height: 10px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+        .legend-laba { background-color: #0d6efd; } /* Primary blue */
+        .legend-pengeluaran { background-color: #198754; } /* Success green */
+
+        /* BARU: Style untuk daftar transaksi & hutang */
+        .list-group-item .transaction-details {
+            line-height: 1.2;
+        }
+        .transaction-details small {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .transaction-amount {
+            font-weight: 600;
+        }
+        .transaction-amount.text-success { color: #198754 !important; }
+        .transaction-amount.text-danger { color: #dc3545 !important; }
+
+        .debt-list-item {
+            display: flex;
+            align-items: center;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .debt-list-item .debt-days {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+
+        /* ======================================= */
+        /* STYLE BARU UNTUK ANALISA PENJUALAN    */
+        /* ======================================= */
+
+        /* Style untuk placeholder grafik penjualan */
+        .sales-graph-placeholder {
+            border-left: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
+            position: relative;
+            height: 250px; /* Tinggi tetap untuk grafik penjualan */
+            padding-left: 2.5rem; /* Ruang untuk label sumbu Y */
+        }
+        /* Label sumbu Y untuk grafik penjualan */
+        .sales-graph-placeholder .y-axis-label {
+            position: absolute;
+            left: 0;
+            width: 2rem;
+            text-align: right;
+            font-size: 0.7rem;
+            color: #6c757d;
+            transform: translateY(-50%);
+        }
+        /* Garis grid untuk grafik penjualan */
+        .sales-graph-placeholder .grid-line {
+            position: absolute;
+            left: 2.5rem;
+            right: 0;
+            border-top: 1px dashed #e9ecef;
+            z-index: 1;
+        }
+        /* Label sumbu X untuk grafik penjualan */
+        .sales-graph-placeholder .x-axis-label {
+            position: absolute;
+            bottom: -20px; 
+            font-size: 0.7rem;
+            color: #6c757d;
+            transform: translateX(-50%);
+        }
+
+        /* Style untuk daftar Top 7 Produk */
+        .top-product-list .list-group-item {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .top-product-list .rank-badge {
+            background-color: #e9ecef;
+            color: #0d6efd;
+            font-weight: 600;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-right: 0.75rem;
+        }
+        .top-product-list .product-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .top-product-list .product-sold {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Style untuk Riwayat Penjualan */
+        .sales-history-list .list-group-item {
+             padding-left: 0.5rem;
+             padding-right: 0.5rem;
+        }
+        .sales-history-list .icon-wrapper {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            margin-right: 0.75rem;
+        }
+
+        /* BARU: Ikon di pojok kanan bawah kartu */
+        .card-icon-bottom {
+            font-size: 3rem; /* Ukuran ikon */
+            opacity: 0.2;    /* Transparansi */
+            line-height: 1;  /* Mengatur tinggi baris */
+        }
+
+        /* ======================================= */
+        /* STYLE BARU UNTUK HALAMAN PENGATURAN   */
+        /* ======================================= */
+
+        .setting-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem; /* Padding kustom */
+        }
+        
+        .setting-list-item .setting-item-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem; /* Jarak antara ikon dan teks */
+        }
+
+        .setting-list-item .icon-wrapper-setting {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.375rem; /* Sedikit membulat */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .setting-list-item .setting-item-details {
+            line-height: 1.3;
+        }
+        .setting-list-item .setting-item-details h6 {
+            margin-bottom: 0.1rem;
+            font-weight: 600;
+        }
+        .setting-list-item .setting-item-details small {
+            font-size: 0.85rem;
+        }
+
+        .setting-util-card {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .setting-util-card h5 {
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+        .setting-util-card p {
+            font-size: 0.9rem;
+        }
+
+        /* ======================================= */
+        /* STYLE BARU UNTUK HALAMAN PRODUK       */
+        /* ======================================= */
+        .product-table-wrapper {
+            background-color: #ffffff;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            overflow: hidden; /* Penting untuk border-radius */
+        }
+
+        .product-table-header {
+            background-color: #192A56; /* Warna biru tua dari gambar */
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .product-table-header .col,
+        .product-table-header .col-md-2,
+        .product-table-header .col-md-3 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .product-table-row {
+            border-bottom: 1px solid #f1f3f7; /* Garis pemisah abu-abu */
+            font-size: 0.9rem;
+        }
+        .product-table-row:last-child {
+            border-bottom: none;
+        }
+        
+        /* DIPERBAIKI: Padding vertikal dikurangi (dari 0.5rem menjadi 0.25rem) */
+        .product-table-row .col-md-2,
+        .product-table-row .col-md-3 {
+            padding-top: 0.25rem; 
+            padding-bottom: 0.25rem;
+        }
+        
+        .product-table-row-flex {
+            display: flex;
+            align-items: center; /* Vertikal tengah */
+        }
+        
+        /* DIPERBAIKI: Mengubah link aksi menjadi button agar tidak ada href */
+        .action-link-edit, .action-link-delete {
+            background: none;
+            border: none;
+            padding: 0;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        .action-link-edit {
+            color: #0d6efd;
+        }
+        .action-link-delete {
+            color: #dc3545;
+        }
+
+
+        /* Penyesuaian untuk tampilan mobile */
+        @media (max-width: 767.98px) {
+            .product-table-header {
+                display: none; /* Sembunyikan header di mobile */
+            }
+            .product-table-row {
+                flex-direction: column;
+                align-items: flex-start !important;
+                /* DIUBAH: Padding vertikal dikurangi sedikit lagi di mobile */
+                padding: 0.5rem 0.75rem; 
+            }
+            .product-table-row .col,
+            .product-table-row .col-5,
+            .product-table-row .col-md-2,
+            .product-table-row .col-md-3 {
+                /* DIUBAH: Padding dikurangi sedikit */
+                padding: 0.1rem 0; 
+                width: 100%;
+                display: flex;
+                justify-content: space-between; /* Membuat layout label-value */
+            }
+            /* Menambahkan label data di mobile */
+            .product-table-row .col::before,
+            .product-table-row .col-5::before,
+            .product-table-row .col-md-2::before,
+            .product-table-row .col-md-3::before {
+                font-weight: 600;
+                margin-right: 0.5rem;
+            }
+            .product-table-row .col-md-3:nth-child(1)::before { content: 'Nama Produk:'; }
+            .product-table-row .col-md-2:nth-child(2)::before { content: 'Modal:'; }
+            .product-table-row .col-md-2:nth-child(3)::before { content: 'Jual:'; }
+            .product-table-row .col-md-2:nth-child(4)::before { content: 'Stok:'; }
+            .product-table-row .col-md-3:nth-child(5) { 
+                justify-content: flex-start; 
+                gap: 1rem; 
+            }
+            .product-table-row .col-md-3:nth-child(5)::before { content: 'Aksi:'; }
+            
+            .product-table-row .col-md-3.justify-content-center {
+                justify-content: flex-start !important;
+            }
+        }
+
+        /* DIPERBAIKI: CSS untuk baris produk dengan flex di mobile */
+        @media (min-width: 768px) {
+            .product-table-row .col-md-3.product-table-row-flex {
+                justify-content: flex-start;
+            }
+            .product-table-row .col-md-2.product-table-row-flex {
+                justify-content: flex-end; /* Default untuk modal, jual, stok */
+            }
+            /* DIPERBAIKI: Aksi dibuat inline */
+            .product-table-row .col-md-3.product-table-row-flex.justify-content-center {
+                justify-content: center !important; /* Khusus untuk Aksi */
+                gap: 0.5rem; /* Jarak antar tombol Edit/Hapus */
+            }
+        }
+
+        /* ======================================= */
+        /* STYLE BARU UNTUK HALAMAN TRANSAKSI    */
+        /* ======================================= */
+        .transaction-header-row {
+            background-color: #FFD966; /* Warna kuning dari gambar */
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
+        }
+
+        .transaction-date-separator {
+            font-weight: 600;
+            color: #6c757d;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .transaction-row-card {
+            font-size: 0.9rem;
+        }
+        /* DIPERBAIKI: Padding vertikal dikurangi agar rapat */
+        .transaction-row-card .card-body {
+            padding: 0.5rem 1.25rem;
+        }
+        
+        .transaction-row-card .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+        .transaction-row-card .transaction-info {
+            line-height: 1.3;
+        }
+        .transaction-row-card .transaction-info .time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .transaction-row-card .transaction-details {
+             font-size: 0.85rem;
+             line-height: 1.3;
+        }
+        .transaction-row-card .transaction-details .catatan {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .transaction-row-card .transaction-total {
+            font-weight: 600;
+        }
+        
+        /* Responsive untuk tabel transaksi */
+        @media (max-width: 767.98px) {
+            .transaction-header-row {
+                display: none; /* Sembunyikan header di mobile */
+            }
+            /* DIPERBAIKI: Padding card body di mobile */
+            .transaction-row-card .card-body {
+                padding: 0.75rem;
+            }
+            .transaction-row-card .row {
+                gap: 0.5rem;
+            }
+            .transaction-row-card .col-md-3,
+            .transaction-row-card .col-md-2 {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px dashed #eee;
+                padding-bottom: 0.5rem;
+            }
+            .transaction-row-card .col-md-3:last-child {
+                border-bottom: 0;
+            }
+            
+            .transaction-row-card .col-md-3::before,
+            .transaction-row-card .col-md-2::before {
+                font-weight: 600;
+                color: #6c757d;
+            }
+            /* Sembunyikan 'Jenis' di mobile, sudah ada ikon */
+            .transaction-row-card .col-md-3:nth-child(1) { 
+                justify-content: flex-start;
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+            .transaction-row-card .col-md-3:nth-child(1)::before { display: none; }
+            .transaction-row-card .col-md-3:nth-child(2)::before { content: 'Rincian:'; }
+            .transaction-row-card .col-md-2:nth-child(3)::before { content: 'Kategori:'; }
+            .transaction-row-card .col-md-2:nth-child(4)::before { content: 'Total:'; }
+            .transaction-row-card .col-md-2:nth-child(5)::before { content: 'Aksi:'; }
+            
+            .transaction-row-card .transaction-details,
+            .transaction-row-card .transaction-total {
+                text-align: right;
+            }
+            .transaction-row-card .col-md-2:nth-child(5) div {
+                 display: flex;
+                 gap: 0.5rem;
+            }
+        }
+        
+        /* ======================================= */
+        /* STYLE BARU UNTUK HALAMAN KASIR        */
+        /* ======================================= */
+        .sales-history-row-card {
+            font-size: 0.9rem;
+        }
+        /* DIPERBAIKI: Padding vertikal dikurangi agar rapat */
+        .sales-history-row-card .card-body {
+            padding: 0.5rem 1.25rem;
+        }
+        
+        /* BARU: Style untuk ikon di halaman kasir */
+        .sales-history-row-card .sales-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+
+        .sales-history-row-card .sales-info {
+            line-height: 1.3;
+        }
+        .sales-history-row-card .sales-info .time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .sales-history-row-card .sales-details {
+             font-size: 0.85rem;
+             line-height: 1.3;
+        }
+        .sales-history-row-card .sales-details .sub-info {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .sales-history-row-card .sales-total {
+            font-weight: 600;
+        }
+        /* Mobile specific labels for Kasir/Penjualan */
+        @media (max-width: 767.98px) {
+             /* DIPERBAIKI: Padding card body di mobile */
+             .sales-history-row-card .card-body {
+                padding: 0.75rem;
+             }
+             .sales-history-row-card .col-md-3:nth-child(2)::before { content: 'Rincian:'; }
+             .sales-history-row-card .col-md-3:nth-child(3)::before { content: 'Harga:'; }
+             .sales-history-row-card .col-md-2:nth-child(4)::before { content: 'Total:'; }
+             .sales-history-row-card .col-md-2:nth-child(5)::before { content: 'Aksi:'; }
+
+             .sales-history-row-card .col-md-3:nth-child(1) { 
+                justify-content: flex-start;
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+             /* BARU: Sembunyikan ::before untuk kolom pertama di mobile (karena sudah ada ikon) */
+             .sales-history-row-card .col-md-3:nth-child(1)::before { display: none; }
+        }
+
+        /* ======================================= */
+        /* STYLE BARU UNTUK HALAMAN HUTANG       */
+        /* ======================================= */
+        .debt-piutang-row-card {
+            font-size: 0.9rem;
+        }
+        /* DIPERBAIKI: Padding vertikal dikurangi agar rapat */
+        .debt-piutang-row-card .card-body {
+            padding: 0.5rem 1.25rem;
+        }
+        
+        .debt-piutang-row-card .debt-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+        .debt-piutang-row-card .person-info {
+            line-height: 1.3;
+        }
+        .debt-piutang-row-card .person-info .time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .debt-piutang-row-card .rincian-details {
+             font-size: 0.85rem;
+             line-height: 1.3;
+        }
+        .debt-piutang-row-card .rincian-details .total-sisa {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        .debt-piutang-row-card .jumlah-total {
+            font-weight: 600;
+        }
+        
+        /* BARU: Style untuk item yang lunas */
+        .debt-piutang-row-card.lunas {
+            opacity: 0.65;
+            background-color: #e9ecef;
+        }
+        .debt-piutang-row-card.lunas .jumlah-total,
+        .debt-piutang-row-card.lunas .rincian-details .fw-bold {
+            text-decoration: line-through;
+        }
+        .lunas-badge {
+            font-size: 0.7rem;
+            vertical-align: middle;
+        }
+
+
+        /* Mobile specific labels for Hutang/Piutang */
+        @media (max-width: 767.98px) {
+            /* DIPERBAIKI: Padding card body di mobile */
+            .debt-piutang-row-card .card-body {
+                padding: 0.75rem;
+            }
+             .debt-piutang-row-card .col-md-3:nth-child(2)::before { content: 'Rincian:'; }
+             /* DIPERBAIKI: Mengganti Tipe menjadi Catatan */
+             .debt-piutang-row-card .col-md-2:nth-child(3)::before { content: 'Catatan:'; } /* DIUBAH: Tipe -> Catatan */
+             .debt-piutang-row-card .col-md-2:nth-child(4)::before { content: 'Jumlah:'; }
+             .debt-piutang-row-card .col-md-2:nth-child(5)::before { content: 'Aksi:'; }
+
+             .debt-piutang-row-card .col-md-3:nth-child(1) { 
+                justify-content: flex-start;
+                border-bottom: 0;
+                padding-bottom: 0;
+            }
+             /* BARU: Sembunyikan ::before untuk kolom pertama di mobile (karena sudah ada ikon) */
+             .debt-piutang-row-card .col-md-3:nth-child(1)::before { display: none; }
+        }
+
+        /* BARU: Tombol FAB (Floating Action Button) */
+        .fab-btn {
+            position: fixed;
+            bottom: 80px; /* Di atas navbar (70px) + margin */
+            right: 20px;
+            z-index: 1050; /* Di atas konten lain */
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+            border: none; /* Menghilangkan border default button */
+        }
+        .fab-btn:hover {
+            box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Mengatasi isian modal yang terlalu panjang di mobile */
+        .modal-body .form-control {
+            font-size: 0.9rem;
+        }
+
+        .master-data-field {
+            display: none;
+        }
+        
+        /* BARU: Style untuk filter tanggal */
+        .filter-nav {
+            background-color: #ffffff;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .filter-nav .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.375rem 0.75rem;
+        }
+        .filter-nav .nav-link.active {
+            color: #ffffff;
+            background-color: #040622;
+        }
+        .filter-nav .form-control, .filter-nav .btn {
+            font-size: 0.9rem;
+        }
+        
+        /* DIPERBAIKI: CSS untuk membuat filter full-width */
+        #filter-container {
+            /* Dihapus: justify-content-center dan col-lg-10 */
+        }
