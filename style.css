@@ -641,7 +641,7 @@ body {
         /* BARU: Style untuk filter tanggal */
         /* DIUBAH: Latar belakang dibuat transparan dan shadow dihapus untuk tampilan lebih bersih */
         .filter-nav {
-            background-color: transparent;
+            background-color: #000000;
             border-radius: 0;
             padding: 0;
             box-shadow: none;
@@ -707,3 +707,4 @@ body {
     padding: 0.25rem 0.5rem;
     margin-left: 1rem; /* Jarak dari teks */
 }
+
