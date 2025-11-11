@@ -641,8 +641,7 @@ body {
         }
         .filter-nav .nav-link.active {
             color: #ffffff;
-            /* DIUBAH: Warna aktif diganti dari biru tua ke biru primer yang lebih cerah */
-            background-color: #0d6efd;
+            background-color: #040622;
         }
         .filter-nav .form-control, .filter-nav .btn {
             font-size: 0.9rem;
