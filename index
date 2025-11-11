@@ -1,1 +1,1478 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Bootstrap Dasar</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- DIPERBAIKI: Memindahkan Chart.js ke <head> untuk memastikan dimuat sebelum DOMContentLoaded -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+
+  <!-- DIKEMBALIKAN: Link CSS Bootstrap Icons (untuk navigasi) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- DIPERBARUI: Memanggil style.css dari URL eksternal -->
+  <link href="https://nusadua-hwp785xy2c.edgeone.app/style.css" rel="stylesheet">
+
+  <!-- 
+    PERBAIKAN: Memindahkan skrip ke <head> dan menambahkan 'defer'.
+    Ini memastikan HTML di-parse penuh sebelum JS dieksekusi, 
+    memperbaiki error 'backdrop'
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha385-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <!-- DIPERBARUI: Memanggil app.js dari URL eksternal dan menambahkan 'defer' -->
+  <script src="https://nusadua-hwp785xy2c.edgeone.app/app.js" defer></script>
+
+</head>
+<body>
+
+    <!-- DIUBAH: kelas bg-primary dihapus -->
+    <header class="text-white shadow-sm sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- DIPERBAIKI: kelas py-2 dihapus, diatur via CSS #page-title -->
+            <h1 id="page-title" class="h4 mb-0 text-start">Dashboard</h1>
+
+            <div class="d-flex align-items-center gap-3">
+                
+                <!-- BARU: Dropdown untuk Pengaturan -->
+                <div class="dropdown">
+                    <!-- Tombol trigger adalah ikon gear -->
+                    <a href="#" class="text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear fs-5"></i>
+                    </a>
+                    <!-- Menu dropdown -->
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <!-- DIHAPUS: Link Produk dihapus dari sini -->
+                        <li><a class="dropdown-item" href="#page-pengaturan" data-page="pengaturan" data-title="Pengaturan">Pengaturan</a></li>
+                        <li><a class="dropdown-item" href="#page-tentang" data-page="tentang" data-title="Tentang">Tentang</a></li>
+                    </ul>
+                </div>
+
+                <a href="#" class="text-white"><i class="bi bi-bell fs-5"></i></a>
+                <!-- DIPERBAIKI: Ikon Jam sekarang memicu Offcanvas Riwayat Hapus -->
+                <a href="#" class="text-white" data-bs-toggle="offcanvas" data-bs-target="#riwayatHapusModal" aria-controls="riwayatHapusModal">
+                    <i class="bi bi-clock fs-5"></i>
+                </a>
+                
+                <!-- DIPERBAIKI: Tombol Hamburger untuk memicu sidebar -->
+                <a class="text-white" data-bs-toggle="offcanvas" href="#sidebarAkun" role="button" aria-controls="sidebarAkun">
+                    <i class="bi bi-list fs-5"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-4">
+        
+        <!-- BARU: Input tersembunyi untuk Import Produk (CSV) -->
+        <input type="file" id="import-produk-input" accept=".csv" class="d-none">
+        <!-- BARU: Input tersembunyi untuk Import Data (JSON) -->
+        <input type="file" id="import-json-input" accept=".json" class="d-none" style="display: none;">
+
+
+        <section id="page-dashboard" class="page-content active">
+            <h2 class="h4 mb-3">Analisa Umum</h2>
+
+            <!-- Baris Kartu Analisa Umum -->
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <!-- DIPERBAIKI: Menambahkan h-100 -->
+                    <div class="card bg-primary text-white shadow-sm h-100">
+                        <!-- DIPERBAIKI: Menambahkan d-flex flex-column -->
+                        <div class="card-body d-flex flex-column">
+                            <!-- Wrapper untuk teks -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0">Total Saldo Tunai</h6>
+                                    <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                    <span class="badge bg-white text-primary rounded-pill" id="dashboard-saldo-persen">+0.0%</span>
+                                </div>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <h2 class="h3 card-text my-2" id="dashboard-total-saldo">Rp 0</h2>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <p class="card-text small mb-0" id="dashboard-saldo-kemarin">vs Rp 0</p>
+                            </div>
+                            <!-- BARU: Ikon di pojok -->
+                            <i class="bi bi-wallet2 card-icon-bottom mt-auto align-self-end"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <!-- DIPERBAIKI: Menambahkan h-100 -->
+                    <div class="card bg-success text-white shadow-sm h-100">
+                        <!-- DIPERBAIKI: Menambahkan d-flex flex-column -->
+                        <div class="card-body d-flex flex-column">
+                            <!-- Wrapper untuk teks -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0">Total Cash</h6>
+                                    <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                    <span class="badge bg-white text-success rounded-pill" id="dashboard-cash-persen">+0.0%</span>
+                                </div>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <h2 class="h3 card-text my-2" id="dashboard-total-cash">Rp 0</h2>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <p class="card-text small mb-0" id="dashboard-cash-kemarin">vs Rp 0</p>
+                            </div>
+                            <!-- BARU: Ikon di pojok -->
+                            <i class="bi bi-cash-stack card-icon-bottom mt-auto align-self-end"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <!-- DIPERBAIKI: Menambahkan h-100 -->
+                    <div class="card bg-danger text-white shadow-sm h-100">
+                        <!-- DIPERBAIKI: Menambahkan d-flex flex-column -->
+                        <div class="card-body d-flex flex-column">
+                            <!-- Wrapper untuk teks -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0">Total Piutang</h6>
+                                    <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                    <span class="badge bg-white text-danger rounded-pill" id="dashboard-piutang-persen">+0.0%</span>
+                                </div>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <h2 class="h3 card-text my-2" id="dashboard-total-piutang">Rp 0</h2>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <p class="card-text small mb-0" id="dashboard-piutang-kemarin">vs Rp 0</p>
+                            </div>
+                             <!-- BARU: Ikon di pojok -->
+                             <i class="bi bi-receipt-cutoff card-icon-bottom mt-auto align-self-end"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baris Grafik dan Tumpukan Kartu -->
+            <div class="row">
+                
+                <div class="col-lg-8 mb-3 mb-lg-0">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title mb-0">Grafik Laba Bersih vs Pengeluaran Rumah</h5>
+                                <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2" id="grafik-naik-persen">NAIK-%</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3 text-secondary fw-semibold">
+                                <div class="text-start">
+                                    <small class="d-block mb-1">Laba Bersih</small>
+                                    <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                    <span class="h5 d-block text-dark" id="grafik-laba-nom">Rp 0</span>
+                                </div>
+                                <div class="text-end">
+                                    <small class="d-block mb-1">Pengeluaran Rumah</small>
+                                    <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
+                                    <span class="h5 d-block text-dark" id="grafik-pr-nom">Rp 0</span>
+                                </div>
+                            </div>
+                            
+                            <!-- DIPERBAIKI: Placeholder diganti dengan Canvas -->
+                            <div class="flex-grow-1 position-relative" style="min-height: 250px;">
+                                <canvas id="labaPengeluaranChart"></canvas>
+                            </div>
+                            
+                            <div class="d-flex justify-content-center graph-legend mt-4">
+                                <div class="legend-item me-4">
+                                    <div class="legend-color-box legend-laba"></div>
+                                    <span>Laba Bersih</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color-box legend-pengeluaran"></div>
+                                    <span>Pengeluaran</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIPERBAIKI: Kolom Kanan (4 Kartu) Dibuat Dinamis -->
+                <div class="col-lg-4 d-flex flex-column gap-3">
+                    <!-- Kartu Saldo Modal -->
+                    <div class="card bg-warning text-dark shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="card-title mb-0">Saldo Modal</h6>
+                                <span class="badge bg-dark text-white rounded-pill" id="dashboard-modal-persen">+0.0%</span>
+                            </div>
+                            <h3 class="card-text my-2" id="dashboard-modal-total">Rp 0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Total Laba Bersih -->
+                    <div class="card bg-primary text-white shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="card-title mb-0">Total Laba Bersih</h6>
+                                <span class="badge bg-white text-primary rounded-pill" id="dashboard-laba-persen">+0.0%</span>
+                            </div>
+                            <h3 class="card-text my-2" id="dashboard-laba-total">Rp 0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Pengeluaran Rumah -->
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="card-title mb-0">Pengeluaran Rumah</h6>
+                                <span class="badge bg-white text-success rounded-pill" id="dashboard-pr-persen">+0.0%</span>
+                            </div>
+                            <h3 class="card-text my-2" id="dashboard-pr-total">Rp 0</h3>
+                        </div>
+                    </div>
+
+                    <!-- DIPERBAIKI: Kartu Tabungan diubah menjadi Kartu Cash (Akun) -->
+                    <div class="card bg-info text-white shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="card-title mb-0">Cash</h6>
+                                <span class="badge bg-white text-info rounded-pill" id="dashboard-tabungan-persen">+0.0%</span>
+                            </div>
+                            <h3 class="card-text my-2" id="dashboard-tabungan-total">Rp 0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!--   BARU: FILTER TANGGAL                -->
+            <!-- ======================================= -->
+            <!-- DIPERBAIKI: Menghapus 'justify-content-center' dan 'col-lg-10' -->
+            <div class="my-4">
+                <div>
+                    <!-- DIPERBAIKI: Mengganti justify-content-center dengan space-between -->
+                    <div class="filter-nav d-flex justify-content-between align-items-center gap-2 w-100">
+                        <ul class="nav nav-pills" id="filter-tanggal-buttons">
+                            <li class="nav-item">
+                                <button class="nav-link" data-tipe="harian">Harian</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-tipe="mingguan">Mingguan</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link active" data-tipe="bulanan">Bulanan</button>
+                            </li>
+                        </ul>
+                        <div class="d-flex gap-2" id="filter-rentang-group">
+                            <input type="date" id="filter-start-date" class="form-control" title="Tanggal Mulai">
+                            <input type="date" id="filter-end-date" class="form-control" title="Tanggal Selesai">
+                            <button class="btn btn-secondary" id="filter-terapkan-btn" data-tipe="rentang">Terapkan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ======================================= -->
+            <!--   BAGIAN ANALISA KHUSUS               -->
+            <!-- ======================================= -->
+
+            <h2 class="h4 mb-3 mt-5">Analisa Khusus</h2>
+
+            <!-- DIPERBAIKI: Baris Kartu Kecil Putih (Dinamis) -->
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-wallet2 fs-3 text-primary me-3"></i>
+                                    <div>
+                                        <!-- DIPERBAIKI: Judul diubah -->
+                                        <h6 class="card-title mb-0 small">Saldo Fee BRI Link</h6>
+                                        <!-- DIPERBAIKI: ID ditambahkan -->
+                                        <span class="h5 card-text mb-0" id="ak-fee-brilink-total">Rp 0</span>
+                                    </div>
+                                </div>
+                                <!-- DIPERBAIKI: ID ditambahkan -->
+                                <span class="h6 mb-0 text-muted" id="ak-fee-brilink-persen">+0.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-bank fs-3 text-success me-3"></i>
+                                    <div>
+                                        <!-- DIPERBAIKI: Judul diubah -->
+                                        <h6 class="card-title mb-0 small">BRI Nussa</h6>
+                                        <!-- DIPERBAIKI: ID ditambahkan -->
+                                        <span class="h5 card-text mb-0" id="ak-bri-nussa-total">Rp 0</span>
+                                    </div>
+                                </div>
+                                <!-- DIPERBAIKI: ID ditambahkan -->
+                                <span class="h6 mb-0 text-muted" id="ak-bri-nussa-persen">+0.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-piggy-bank fs-3 text-warning me-3"></i>
+                                    <div>
+                                        <h6 class="card-title mb-0 small">Tabungan</h6>
+                                        <!-- DIPERBAIKI: ID ditambahkan -->
+                                        <span class="h5 card-text mb-0" id="ak-tabungan-total">Rp 0</span>
+                                    </div>
+                                </div>
+                                <!-- DIPERBAIKI: ID ditambahkan -->
+                                <span class="h6 mb-0 text-muted" id="ak-tabungan-persen">+0.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baris Kartu Berwarna -->
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card bg-primary text-white shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-wallet2 fs-2 me-3"></i>
+                                <div>
+                                    <h6 class="card-title mb-0 small">Saldo Emas BRI Link</h6>
+                                    <span class="h5 card-text mb-0">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-bank fs-2 me-3"></i>
+                                <div>
+                                    <h6 class="card-title mb-0 small">BRI Hupana</h6>
+                                    <span class="h5 card-text mb-0">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card bg-warning text-dark shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-piggy-bank fs-2 me-3"></i>
+                                <div>
+                                    <h6 class="card-title mb-0 small">Tabungan</h6>
+                                    <span class="h5 card-text mb-0">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baris Riwayat dan Hutang -->
+            <div class="row">
+                <!-- Kolom Riwayat Transaksi -->
+                <div class="col-lg-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Riwayat Transaksi Keuangan</h5>
+                            <ul class="list-group list-group-flush" id="dashboard-transaksi-terbaru">
+                                <!-- Riwayat transaksi akan dirender di sini oleh JavaScript -->
+                                <li class="list-group-item d-flex justify-content-center align-items-center p-4">
+                                    <span class="text-muted">Tidak ada transaksi terbaru.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Hutang Teratas -->
+                <div class="col-lg-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Hutang Teratas</h5>
+                            <ul class="list-group list-group-flush" id="dashboard-hutang-teratas">
+                                <!-- Hutang teratas akan dirender di sini oleh JavaScript -->
+                                <li class="list-group-item d-flex justify-content-center align-items-center p-4">
+                                    <span class="text-muted">Tidak ada hutang.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!--   BAGIAN ANALISA PENJUALAN BARU         -->
+            <!-- ======================================= -->
+
+            <h2 class="h4 mb-3 mt-5">Analisa Penjualan</h2>
+
+            <!-- Baris Grafik Penjualan dan Info -->
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <!-- DIPERBAIKI: Struktur kartu diubah agar sesuai gambar -->
+                    <div class="card shadow-sm">
+                        
+                        <!-- BARU: Card Header untuk Judul Kiri dan Kanan -->
+                        <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0 fw-bold">Penjualan</h5>
+                                <h5 class="card-title mb-0 fw-bold" style="color: #aab2c8;">Grafik Penjualan</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <!-- Kolom Info Penjualan -->
+                                <div class="col-lg-5">
+                                    
+                                    <!-- DIHAPUS: Judul "Penjualan" dipindah ke header -->
+                                    
+                                    <!-- BARU: Bagian Laba Penjualan (sesuai gambar) -->
+                                    <div class="mb-4">
+                                        <small class="text-muted d-block">Laba Penjualan</small>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="mb-0 fw-bold" id="sales-laba">Rp 0</h4>
+                                            <!-- Badge dipindah dari kanan -->
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 ms-3" id="sales-persen">T-1%</span>
+                                        </div>
+                                    </div>
+                                    <!-- AKHIR BARU -->
+                                    
+                                    <!-- DIPERBAIKI: Grid 2x3 untuk sisa data -->
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <!-- DIPERBAIKI: Label diganti style-nya -->
+                                            <small class="fw-semibold text-dark d-block">Produk Terjual</small>
+                                            <h5 class="mb-0" id="sales-qty">0</h5>
+                                        </div>
+                                        <div class="col-6">
+                                            <!-- DIPERBAIKI: Label diganti style-nya -->
+                                            <small class="fw-semibold text-dark d-block">Jasa Terjual</small>
+                                            <!-- BARU: ID baru untuk Jasa QTY -->
+                                            <h5 class="mb-0" id="sales-jasa-qty">0</h5> 
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                             <!-- DIPERBAIKI: Label diganti style-nya -->
+                                            <small class="fw-semibold text-dark d-block">Produk</small>
+                                            <h5 class="mb-0" id="sales-produk">Rp 0</h5>
+                                        </div>
+                                        <div class="col-6">
+                                             <!-- DIPERBAIKI: Label diganti style-nya -->
+                                            <small class="fw-semibold text-dark d-block">Aplikasi</small>
+                                            <h5 class="mb-0" id="sales-aplikasi">Rp 0</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                             <!-- DIPERBAIKI: Label diganti style-nya -->
+                                            <small class="fw-semibold text-dark d-block">Jasa</small>
+                                            <h5 class="mb-0" id="sales-jasa">Rp 0</h5>
+                                        </div>
+                                        <div class="col-6">
+                                             <!-- DIPERBAIKI: Label diganti style-nya dan ID -->
+                                             <!-- DIUBAH: Label diubah dari 'Laba TRX' -->
+                                            <small class="fw-semibold text-dark d-block">Total TRX</small>
+                                            <h5 class="mb-0" id="sales-tf">Rp 0</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Kolom Grafik Penjualan -->
+                                <div class="col-lg-7 mt-4 mt-lg-0">
+                                    
+                                    <!-- DIHAPUS: Judul dan badge dipindah -->
+                                    
+                                    <!-- Placeholder Grafik Penjualan -->
+                                    <div class="position-relative" style="height: 250px;">
+                                        <canvas id="penjualanChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIPERBAIKI: Baris Kartu Sub-Penjualan (Judul dan ID diubah) -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-router fs-3 text-primary me-3"></i>
+                                <div>
+                                    <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Produk</h6>
+                                    <span class="h6 fw-bold card-text mb-0" id="sales-produk-h">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-laptop fs-3 text-info me-3"></i>
+                                <div>
+                                    <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Jasa</h6>
+                                    <span class="h6 fw-bold card-text mb-0" id="sales-jasa-h">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-grid fs-3 text-success me-3"></i>
+                                <div>
+                                    <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Aplikasi</h6>
+                                    <span class="h6 fw-bold card-text mb-0" id="sales-apk-h">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-arrow-right-short fs-3 text-danger me-3"></i>
+                                <div>
+                                    <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
+                                    <!-- DIUBAH: Judul diubah dari 'Total Laba TRX' -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Transaksi</h6>
+                                    <!-- DIPERBAIKI: ID diubah -->
+                                    <span class="h6 fw-bold card-text mb-0" id="sales-trx-h">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baris Top 7 Produk dan Riwayat Penjualan -->
+            <div class="row">
+                <!-- Kolom Top 7 Produk -->
+                <div class="col-lg-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Top 7 Produk</h5>
+                            <ul class="list-group list-group-flush top-product-list" id="dashboard-top-produk">
+                                <!-- Top produk akan dirender di sini oleh JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Riwayat Penjualan -->
+                <div class="col-lg-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Riwayat Penjualan</h5>
+                            <ul class="list-group list-group-flush sales-history-list" id="dashboard-riwayat-penjualan">
+                                <!-- Riwayat penjualan akan dirender di sini oleh JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Kasir diisi dengan konten baru -->
+        <section id="page-kasir" class="page-content">
+            <h2 class="h4 mb-3">Riwayat Penjualan</h2>
+
+            <!-- Header Tabel Kasir (Hanya Desktop) -->
+            <div class="row transaction-header-row d-none d-md-flex mx-0">
+                <div class="col-md-3">Jenis</div>
+                <div class="col-md-3">Rincian</div>
+                <div class="col-md-2">Harga</div>
+                <div class="col-md-2 text-end">Total</div>
+                <div class="col-md-2 text-center">Aksi</div>
+            </div>
+
+            <!-- Daftar Penjualan -->
+            <div class="sales-list-container" id="sales-list-container">
+                <!-- Data penjualan akan dirender di sini oleh JavaScript -->
+            </div>
+            
+            <!-- DIPERBAIKI: FAB di halaman Kasir memicu modal Kasir -->
+            <button class="btn btn-primary fab-btn shadow-lg" title="Tambah Penjualan Baru" data-bs-toggle="modal" data-bs-target="#kasirModal" data-action="tambah">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Transaksi diisi dengan konten baru -->
+        <section id="page-transaksi" class="page-content">
+            <h2 class="h4 mb-3">Riwayat Transaksi Keuangan</h2>
+            
+            <!-- Header Tabel Transaksi (Hanya Desktop) -->
+            <div class="row transaction-header-row d-none d-md-flex mx-0">
+                <div class="col-md-3">Jenis</div>
+                <div class="col-md-3">Rincian</div>
+                <div class="col-md-2">Kategori</div>
+                <div class="col-md-2 text-end">Total</div>
+                <div class="col-md-2 text-center">Aksi</div>
+            </div>
+
+            <!-- Daftar Transaksi -->
+            <div class="transaction-list-container" id="transaction-list-container">
+                <!-- Data transaksi akan dirender di sini oleh JavaScript -->
+            </div>
+            
+            <!-- BARU: Tombol FAB Transaksi -->
+            <!-- DIPERBAIKI: Target Modal ke #transaksiModal -->
+            <button class="btn btn-primary fab-btn shadow-lg" title="Tambah Transaksi Baru" data-bs-toggle="modal" data-bs-target="#transaksiModal" data-action="tambah">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+
+        </section>
+
+        <!-- BARU: Halaman Hutang diisi dengan konten baru -->
+        <section id="page-hutang" class="page-content">
+            <h2 class="h4 mb-3">Hutang & Piutang</h2>
+
+            <!-- DIPERBAIKI: Header Tabel Hutang -->
+            <div class="row transaction-header-row d-none d-md-flex mx-0">
+                <div class="col-md-3">Pihak Terkait</div>
+                <div class="col-md-3">Rincian</div>
+                <!-- DIUBAH: Tipe -> Catatan -->
+                <div class="col-md-2">Catatan</div> 
+                <div class="col-md-2 text-end">Jumlah</div>
+                <div class="col-md-2 text-center">Aksi</div>
+            </div>
+
+            <!-- Daftar Hutang & Piutang -->
+            <div class="debt-list-container" id="debt-list-container">
+                <!-- Data hutang/piutang akan dirender di sini oleh JavaScript -->
+            </div>
+            
+            <!-- BARU: Tombol FAB Hutang/Piutang -->
+            <button class="btn btn-danger fab-btn shadow-lg" title="Tambah Hutang/Piutang" data-bs-toggle="modal" data-bs-target="#hutangModal" data-action="tambah">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+
+        </section>
+
+        <section id="page-laporan" class="page-content">
+            <h2 class="h4 mb-3">Laporan Keuangan</h2>
+            <!-- Konten Laporan akan ditambahkan di sini -->
+            <p>Fitur laporan sedang dalam pengembangan.</p>
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Pengaturan diisi dengan konten baru -->
+        <section id="page-pengaturan" class="page-content">
+            <h2 class="h4 mb-3">Master Data</h2>
+            
+            <div class="card shadow-sm">
+                <div class="list-group list-group-flush">
+                    <!-- Item 1: Kelola Produk -->
+                    <!-- DIPERBAIKI: Menambahkan href, data-page, dan data-title -->
+                    <a href="#page-kelola-produk" data-page="kelola-produk" data-title="Kelola Produk" class="list-group-item list-group-item-action setting-list-item">
+                        <div class="setting-item-content">
+                            <div class="icon-wrapper-setting bg-primary-subtle text-primary">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <div class="setting-item-details">
+                                <h6 class="mb-0">Kelola Produk</h6>
+                                <small class="text-muted">Kelola inventaris, harga modal, dan harga jual.</small>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                    <!-- Item 2: Kelola Kategori -->
+                    <!-- DIPERBAIKI: Menambahkan href, data-page, dan data-title -->
+                    <a href="#page-kelola-kategori" data-page="kelola-kategori" data-title="Kelola Kategori" class="list-group-item list-group-item-action setting-list-item">
+                        <div class="setting-item-content">
+                            <div class="icon-wrapper-setting bg-success-subtle text-success">
+                                <i class="bi bi-tags"></i>
+                            </div>
+                            <div class="setting-item-details">
+                                <h6 class="mb-0">Kelola Kategori</h6>
+                                <small class="text-muted">Atur semua kategori pendapatan dan pengeluaran.</small>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                    <!-- Item 3: Kelola Akun -->
+                    <!-- DIPERBAIKI: Menambahkan href, data-page, dan data-title -->
+                    <a href="#page-kelola-akun" data-page="kelola-akun" data-title="Kelola Akun" class="list-group-item list-group-item-action setting-list-item">
+                        <div class="setting-item-content">
+                            <div class="icon-wrapper-setting bg-success-subtle text-success">
+                                <i class="bi bi-credit-card"></i>
+                            </div>
+                            <div class="setting-item-details">
+                                <h6 class="mb-0">Kelola Akun</h6>
+                                <small class="text-muted">Kelola semua akun bank, e-wallet, dan kas tunai.</small>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                    <!-- Item 4: Jenis Transaksi -->
+                    <!-- DIPERBAIKI: Menambahkan href, data-page, dan data-title -->
+                    <a href="#page-jenis-transaksi" data-page="jenis-transaksi" data-title="Jenis Transaksi" class="list-group-item list-group-item-action setting-list-item">
+                        <div class="setting-item-content">
+                            <div class="icon-wrapper-setting bg-warning-subtle text-warning">
+                                <i class="bi bi-question-circle"></i>
+                            </div>
+                            <div class="setting-item-details">
+                                <h6 class="mb-0">Jenis Transaksi</h6>
+                                <small class="text-muted">Definisikan tipe transaksi (Pemasukan, Transfer, dll).</small>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                    <!-- Item 5: Kelola Pengguna -->
+                    <!-- DIPERBAIKI: Menambahkan href, data-page, dan data-title -->
+                    <a href="#page-kelola-pengguna" data-page="kelola-pengguna" data-title="Kelola Pengguna" class="list-group-item list-group-item-action setting-list-item">
+                        <div class="setting-item-content">
+                            <div class="icon-wrapper-setting bg-secondary-subtle text-secondary">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="setting-item-details">
+                                <h6 class="mb-0">Kelola Pengguna</h6>
+                                <small class="text-muted">Atur siapa saja yang dapat mengakses aplikasi ini.</small>
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </a>
+                </div>
+            </div>
+
+            <h2 class="h4 mb-3 mt-5">Utilitas</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <!-- DIPERBAIKI: Menggunakan <button> alih-alih <a> -->
+                    <button class="btn card shadow-sm h-100 w-100" id="export-json-btn">
+                        <div class="card-body text-center setting-util-card">
+                            <i class="bi bi-database-down fs-1 text-primary"></i>
+                            <h5 class="mt-3">Export Data</h5>
+                            <p class="text-muted mb-0">Simpan cadangan data Anda ke sebuah file.</p>
+                        </div>
+                    </button>
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <button class="btn card shadow-sm h-100 w-100" id="import-json-btn">
+                        <div class="card-body text-center setting-util-card">
+                            <i class="bi bi-database-up fs-1 text-primary"></i>
+                            <h5 class="mt-3">Import Data</h5>
+                            <p class="text-muted mb-0">Pulihkan data dari file cadangan.</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="page-tentang" class="page-content">
+            <h2>Konten Tentang</h2>
+            <p>Ini adalah halaman Tentang, diakses dari menu pengaturan.</p>
+        </section>
+
+        <!-- ======================================= -->
+        <!--   HALAMAN MASTER DATA BARU              -->
+        <!-- ======================================= -->
+
+        <!-- DIPERBAIKI: Halaman Kelola Produk diisi dengan konten baru -->
+        <section id="page-kelola-produk" class="page-content">
+            
+            <!-- BARU: Tombol Kembali -->
+            <a href="#page-pengaturan" class="btn btn-outline-primary btn-sm mb-3 back-to-settings-btn" data-page="pengaturan" data-title="Pengaturan">
+                <i class="bi bi-arrow-left"></i> Kembali ke Pengaturan
+            </a>
+
+            <!-- Baris Kartu Atas -->
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <small class="text-muted d-block">Total Asset Modal</small>
+                            <!-- DIPERBAIKI: ID ditambahkan -->
+                            <h4 class="mb-0" id="produk-total-asset">Rp 0</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <!-- DIPERBAIKI: Mengubah <a> menjadi <button> dan menambah ID -->
+                        <button class="btn card-body" id="export-produk-btn">
+                            <h6 class="fw-bold">Export Data (CSV)</h6>
+                            <small class="text-muted mb-0">Export semua produk ke CSV.</small>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <!-- DIPERBAIKI: Mengubah <a> menjadi <button> dan menambah ID -->
+                        <button class="btn card-body" id="import-produk-btn">
+                            <h6 class="fw-bold">Import Data (CSV)</h6>
+                            <small class="text-muted mb-0">Import produk baru dari CSV.</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Halaman -->
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <h2 class="h4 mb-0">Daftar Produk</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#masterDataModal" data-type="produk" data-action="tambah">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Produk
+                </button>
+            </div>
+
+            <!-- Tabel Produk -->
+            <!-- DIPERBAIKI: Menambahkan ID untuk rendering dinamis -->
+            <div class="product-table-wrapper" id="product-table-container">
+                <!-- Header Tabel -->
+                <div class="row product-table-header d-none d-md-flex mx-0">
+                    <div class="col-md-3">Nama Produk</div>
+                    <div class="col-md-2 text-end">Modal</div>
+                    <div class="col-md-2 text-end">Jual</div>
+                    <div class="col-md-2 text-end">Stok</div>
+                    <div class="col-md-3 text-center">Aksi</div>
+                </div>
+                <!-- Data produk akan dirender di sini oleh JavaScript -->
+            </div>
+
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Kelola Kategori diisi dengan konten baru -->
+        <section id="page-kelola-kategori" class="page-content">
+            <!-- BARU: Tombol Kembali -->
+            <a href="#page-pengaturan" class="btn btn-outline-primary btn-sm mb-3 back-to-settings-btn" data-page="pengaturan" data-title="Pengaturan">
+                <i class="bi bi-arrow-left"></i> Kembali ke Pengaturan
+            </a>
+
+            <!-- Header Halaman -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Kelola Kategori</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#masterDataModal" data-type="kategori" data-action="tambah">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Kategori
+                </button>
+            </div>
+
+            <!-- Daftar Kategori -->
+            <div class="card shadow-sm">
+                <ul class="list-group list-group-flush" id="kategori-list-container">
+                    <!-- Data kategori akan dirender di sini oleh JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Kelola Akun diisi dengan konten baru -->
+        <section id="page-kelola-akun" class="page-content">
+            <!-- BARU: Tombol Kembali -->
+            <a href="#page-pengaturan" class="btn btn-outline-primary btn-sm mb-3 back-to-settings-btn" data-page="pengaturan" data-title="Pengaturan">
+                <i class="bi bi-arrow-left"></i> Kembali ke Pengaturan
+            </a>
+            
+            <!-- DIPERBAIKI: Header Halaman -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Kelola Akun</h2>
+                <div>
+                    <a href="#" class="btn btn-success me-2">
+                        <i class="bi bi-sliders me-1"></i> Sesuaikan Saldo
+                    </a>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#masterDataModal" data-type="akun" data-action="tambah">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Akun
+                    </button>
+                </div>
+            </div>
+
+            <!-- DIPERBAIKI: Daftar Akun dengan Saldo -->
+            <div class="card shadow-sm">
+                <ul class="list-group list-group-flush" id="akun-list-container">
+                    <!-- Data akun akan dirender di sini oleh JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Jenis Transaksi diisi dengan konten baru -->
+        <section id="page-jenis-transaksi" class="page-content">
+            <!-- BARU: Tombol Kembali -->
+            <a href="#page-pengaturan" class="btn btn-outline-primary btn-sm mb-3 back-to-settings-btn" data-page="pengaturan" data-title="Pengaturan">
+                <i class="bi bi-arrow-left"></i> Kembali ke Pengaturan
+            </a>
+            
+            <!-- Header Halaman -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Jenis Transaksi</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#masterDataModal" data-type="jenisTransaksi" data-action="tambah">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Jenis
+                </button>
+            </div>
+
+            <!-- Daftar Jenis Transaksi -->
+            <div class="card shadow-sm">
+                <ul class="list-group list-group-flush" id="jenis-transaksi-list-container">
+                    <!-- Data jenis transaksi akan dirender di sini oleh JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- DIPERBAIKI: Halaman Kelola Pengguna diisi dengan konten baru -->
+        <section id="page-kelola-pengguna" class="page-content">
+            <!-- BARU: Tombol Kembali -->
+            <a href="#page-pengaturan" class="btn btn-outline-primary btn-sm mb-3 back-to-settings-btn" data-page="pengaturan" data-title="Pengaturan">
+                <i class="bi bi-arrow-left"></i> Kembali ke Pengaturan
+            </a>
+            
+            <!-- Header Halaman -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Kelola Pengguna</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#masterDataModal" data-type="pengguna" data-action="tambah">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Pengguna
+                </button>
+            </div>
+
+            <!-- Daftar Pengguna -->
+            <div class="card shadow-sm">
+                <ul class="list-group list-group-flush" id="pengguna-list-container">
+                    <!-- Data pengguna akan dirender di sini oleh JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+
+    </main>
+    
+    <!-- ======================================= -->
+    <!--          MODAL KASIR (PENJUALAN)        -->
+    <!-- ======================================= -->
+    <div class="modal fade" id="kasirModal" tabindex="-1" aria-labelledby="kasirModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="kasirModalLabel">Buat Penjualan Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nav Tab untuk Jenis Penjualan -->
+                    <ul class="nav nav-tabs mb-3" id="salesTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="produk-tab" data-bs-toggle="tab" data-bs-target="#produk-content" type="button" role="tab" aria-controls="produk-content" aria-selected="true">Produk</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="jasa-tab" data-bs-toggle="tab" data-bs-target="#jasa-content" type="button" role="tab" aria-controls="jasa-content" aria-selected="false">Jasa</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="aplikasi-tab" data-bs-toggle="tab" data-bs-target="#aplikasi-content" type="button" role="tab" aria-controls="aplikasi-content" aria-selected="false">Aplikasi</button>
+                        </li>
+                    </ul>
+
+                    <!-- Konten Tab -->
+                    <div class="tab-content" id="salesTabContent">
+                        
+                        <!-- Tab 1: Penjualan Produk -->
+                        <div class="tab-pane fade show active" id="produk-content" role="tabpanel" aria-labelledby="produk-tab">
+                            <form id="form-produk">
+                                <input type="hidden" id="produk-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="produkTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="produkTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="produkNama" class="form-label">Nama Produk</label>
+                                    <select class="form-select" id="produkNama">
+                                        <option value="">Pilih Produk (dari Master Data)</option>
+                                        <!-- Opsi produk diisi oleh JS -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="produkKuantitas" class="form-label">Kuantitas</label>
+                                    <input type="number" class="form-control" id="produkKuantitas" placeholder="Masukkan jumlah barang" value="1">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Tab 2: Penjualan Jasa -->
+                        <div class="tab-pane fade" id="jasa-content" role="tabpanel" aria-labelledby="jasa-tab">
+                            <form id="form-jasa">
+                                <input type="hidden" id="jasa-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="jasaTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="jasaTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jasaNama" class="form-label">Nama Jasa</label>
+                                    <input type="text" class="form-control" id="jasaNama" placeholder="Contoh: Jasa Transfer Bank">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jasaModal" class="form-label">Harga Modal</label>
+                                    <input type="number" class="form-control" id="jasaModal" placeholder="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jasaJual" class="form-label">Harga Jual</label>
+                                    <input type="number" class="form-control" id="jasaJual" placeholder="0">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Tab 3: Penjualan Aplikasi -->
+                        <div class="tab-pane fade" id="aplikasi-content" role="tabpanel" aria-labelledby="aplikasi-tab">
+                            <form id="form-aplikasi">
+                                <input type="hidden" id="aplikasi-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="aplikasiTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="aplikasiTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="aplikasiSumber" class="form-label">Nama/Sumber Akun</label>
+                                    <select class="form-select akun-dropdown" id="aplikasiSumber">
+                                        <option value="">Pilih Akun (Cash, Dana, Go-Pay, dll)</option>
+                                        <!-- Opsi akun diisi oleh JS -->
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="aplikasiNominal" class="form-label">Nominal (Modal)</label>
+                                    <input type="number" class="form-control" id="aplikasiNominal" placeholder="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="aplikasiJual" class="form-label">Harga Jual</label>
+                                    <input type="number" class="form-control" id="aplikasiJual" placeholder="0">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpan-penjualan-btn">Simpan Penjualan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ======================================= -->
+    <!--          MODAL TRANSAKSI                -->
+    <!-- ======================================= -->
+    <div class="modal fade" id="transaksiModal" tabindex="-1" aria-labelledby="transaksiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="transaksiModalLabel">Buat Transaksi Keuangan Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nav Tab untuk Jenis Transaksi -->
+                    <ul class="nav nav-tabs mb-3" id="trxTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pendapatan-tab" data-bs-toggle="tab" data-bs-target="#pendapatan-content-trx" type="button" role="tab" aria-controls="pendapatan-content-trx" aria-selected="true">Pendapatan</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pengeluaran-tab" data-bs-toggle="tab" data-bs-target="#pengeluaran-content" type="button" role="tab" aria-controls="pengeluaran-content" aria-selected="false">Pengeluaran</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="transfer-tab" data-bs-toggle="tab" data-bs-target="#transfer-content" type="button" role="tab" aria-controls="transfer-content" aria-selected="false">Transfer</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="trx-tab" data-bs-toggle="tab" data-bs-target="#trx-content" type="button" role="tab" aria-controls="trx-content" aria-selected="false">TRX</button>
+                        </li>
+                    </ul>
+
+                    <!-- Konten Tab -->
+                    <div class="tab-content" id="trxTabContent">
+                        
+                        <!-- Tab 1: Pendapatan (Pemasukan) -->
+                        <!-- DIPERBAIKI: ID unik untuk konten tab -->
+                        <div class="tab-pane fade show active" id="pendapatan-content-trx" role="tabpanel" aria-labelledby="pendapatan-tab">
+                            <form id="form-pendapatan">
+                                <input type="hidden" id="pendapatan-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="pendapatanTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="pendapatanTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pendapatanKeAkun" class="form-label">Ke Akun</label>
+                                    <select class="form-select akun-dropdown" id="pendapatanKeAkun">
+                                        <option value="">Pilih Akun (Tujuan Dana)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pendapatanKategori" class="form-label">Kategori</label>
+                                    <select class="form-select kategori-dropdown" id="pendapatanKategori">
+                                        <option value="">Pilih Kategori (Pemasukan, Laba Bersih, dll)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pendapatanNominal" class="form-label">Nominal</label>
+                                    <input type="number" class="form-control" id="pendapatanNominal" placeholder="Masukkan nominal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pendapatanCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="pendapatanCatatan" placeholder="Catatan transaksi">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Tab 2: Pengeluaran -->
+                        <div class="tab-pane fade" id="pengeluaran-content" role="tabpanel" aria-labelledby="pengeluaran-tab">
+                            <form id="form-pengeluaran">
+                                <input type="hidden" id="pengeluaran-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="pengeluaranTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="pengeluaranTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pengeluaranDariAkun" class="form-label">Dari Akun</label>
+                                    <select class="form-select akun-dropdown" id="pengeluaranDariAkun">
+                                        <option value="">Pilih Akun (Sumber Dana)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pengeluaranKategori" class="form-label">Kategori</label>
+                                    <select class="form-select kategori-dropdown" id="pengeluaranKategori">
+                                        <option value="">Pilih Kategori (Pengeluaran, Pengeluaran Rumah, dll)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pengeluaranNominal" class="form-label">Nominal</label>
+                                    <input type="number" class="form-control" id="pengeluaranNominal" placeholder="Masukkan nominal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pengeluaranCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="pengeluaranCatatan" placeholder="Catatan transaksi">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Tab 3: Transfer -->
+                        <div class="tab-pane fade" id="transfer-content" role="tabpanel" aria-labelledby="transfer-tab">
+                            <form id="form-transfer">
+                                <input type="hidden" id="transfer-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="transferTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="transferTanggal">
+                                </div>
+                                <!-- DIUBAH: Menambahkan Row dan Col -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transferDariAkun" class="form-label">Dari Akun</label>
+                                        <select class="form-select akun-dropdown" id="transferDariAkun">
+                                            <option value="">Pilih Akun Sumber</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transferKeAkun" class="form-label">Ke Akun</label>
+                                        <select class="form-select akun-dropdown" id="transferKeAkun">
+                                            <option value="">Pilih Akun Tujuan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Akhir Perubahan -->
+                                <div class="mb-3">
+                                    <label for="transferKategori" class="form-label">Kategori</label>
+                                    <select class="form-select kategori-dropdown" id="transferKategori">
+                                        <option value="">Pilih Kategori (Transfer, Setor Tunai, dll)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="transferNominal" class="form-label">Nominal</label>
+                                    <input type="number" class="form-control" id="transferNominal" placeholder="Masukkan nominal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="transferCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="transferCatatan" placeholder="Catatan transaksi">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Tab 4: TRX (Transaksi Aplikasi PPOB/Agen) -->
+                        <div class="tab-pane fade" id="trx-content" role="tabpanel" aria-labelledby="trx-tab">
+                             <form id="form-trx">
+                                <input type="hidden" id="trx-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="trxTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="trxTanggal">
+                                </div>
+                                <!-- DIUBAH: Menambahkan Row dan Col -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="trxDariAkun" class="form-label">Dari Akun (Modal)</label>
+                                        <select class="form-select akun-dropdown" id="trxDariAkun">
+                                            <option value="">Pilih Akun Modal (misalnya: Digipos)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="trxKeAkun" class="form-label">Ke Akun (Penjualan)</label>
+                                        <select class="form-select akun-dropdown" id="trxKeAkun">
+                                            <option value="">Pilih Akun Penerima (misalnya: Cash)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Akhir Perubahan -->
+                                <div class="mb-3">
+                                    <label for="trxKategori" class="form-label">Kategori</label>
+                                    <select class="form-select kategori-dropdown" id="trxKategori">
+                                        <option value="">Pilih Kategori (Penjualan Transaksi)</option>
+                                    </select>
+                                </div>
+                                <!-- DIUBAH: Menambahkan Row dan Col -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="trxNominal" class="form-label">Nominal (Modal Keluar)</label>
+                                        <input type="number" class="form-control" id="trxNominal" placeholder="Nominal Modal yang terpakai">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="trxFee" class="form-label">Fee/Laba</label>
+                                        <input type="number" class="form-control" id="trxFee" placeholder="Laba/Fee yang didapat">
+                                    </div>
+                                </div>
+                                <!-- Akhir Perubahan -->
+                                <div class="mb-3">
+                                    <label for="trxCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="trxCatatan" placeholder="Detail: Pulsa 10k Tsel">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpan-transaksi-btn">Simpan Transaksi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ======================================= -->
+    <!--          MODAL HUTANG/PIUTANG           -->
+    <!-- ======================================= -->
+    <div class="modal fade" id="hutangModal" tabindex="-1" aria-labelledby="hutangModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="hutangModalLabel">Tambah Hutang/Piutang Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="hutangTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="piutang-tab" data-bs-toggle="tab" data-bs-target="#piutang-content" type="button" role="tab" aria-controls="piutang-content" aria-selected="true">Piutang</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="hutang-tab" data-bs-toggle="tab" data-bs-target="#hutang-content" type="button" role="tab" aria-controls="hutang-content" aria-selected="false">Hutang</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="hutangTabContent">
+                        <div class="tab-pane fade show active" id="piutang-content" role="tabpanel" aria-labelledby="piutang-tab">
+                            <form id="form-piutang">
+                                <input type="hidden" id="piutang-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="piutangTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="piutangTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="piutangPihak" class="form-label">Nama Pihak (Pelanggan)</label>
+                                    <input type="text" class="form-control" id="piutangPihak" placeholder="Contoh: Pelanggan A">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="piutangNominal" class="form-label">Nominal</label>
+                                    <input type="number" class="form-control" id="piutangNominal" placeholder="Masukkan nominal piutang">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="piutangCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="piutangCatatan" placeholder="Catatan piutang (opsional)">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="hutang-content" role="tabpanel" aria-labelledby="hutang-tab">
+                            <form id="form-hutang">
+                                <input type="hidden" id="hutang-id-edit" value="">
+                                <div class="mb-3">
+                                    <label for="hutangTanggal" class="form-label">Tanggal</label>
+                                    <input type="date" class="form-control" id="hutangTanggal">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hutangPihak" class="form-label">Nama Pihak (Supplier)</label>
+                                    <input type="text" class="form-control" id="hutangPihak" placeholder="Contoh: Supplier Pulsa">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hutangNominal" class="form-label">Nominal</label>
+                                    <input type="number" class="form-control" id="hutangNominal" placeholder="Masukkan nominal hutang">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hutangCatatan" class="form-label">Catatan</label>
+                                    <input type="text" class="form-control" id="hutangCatatan" placeholder="Catatan hutang (opsional)">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpan-hutang-btn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ======================================= -->
+    <!--      MODAL MASTER DATA (CRUD)           -->
+    <!-- ======================================= -->
+    <div class="modal fade" id="masterDataModal" tabindex="-1" aria-labelledby="masterDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="masterDataModalLabel">...</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-master-data">
+                        <input type="hidden" id="masterDataType" value="">
+                        <input type="hidden" id="masterDataId" value="">
+                        <div class="mb-3 master-data-field" id="field-nama">
+                            <label for="masterNama" class="form-label">Nama</label>
+                            <input type="text" class="form-control" id="masterNama" placeholder="Masukkan nama">
+                        </div>
+                        <div class="mb-3 master-data-field" id="field-saldo">
+                            <label for="masterSaldo" class="form-label">Saldo Awal</label>
+                            <input type="number" class="form-control" id="masterSaldo" placeholder="0">
+                        </div>
+                        <div class="mb-3 master-data-field" id="field-modal">
+                            <label for="masterModal" class="form-label">Harga Modal</label>
+                            <input type="number" class="form-control" id="masterModal" placeholder="0">
+                        </div>
+                        <div class="mb-3 master-data-field" id="field-jual">
+                            <label for="masterJual" class="form-label">Harga Jual</label>
+                            <input type="number" class="form-control" id="masterJual" placeholder="0">
+                        </div>
+                        <div class="mb-3 master-data-field" id="field-stok">
+                            <label for="masterStok" class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="masterStok" placeholder="0">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="simpan-master-data-btn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================= -->
+    <!--      DIUBAH: MODAL -> OFFCANVAS RIWAYAT HAPUS -->
+    <!-- ======================================= -->
+    <div class="offcanvas offcanvas-end" data-bs-theme="light" tabindex="-1" id="riwayatHapusModal" aria-labelledby="riwayatHapusModalLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="riwayatHapusModalLabel">
+                <i class="bi bi-clock-history me-2"></i> Riwayat Hapus
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <p class="text-muted p-3 mb-0" style="font-size: 0.9rem;">
+                Item yang dihapus akan tersimpan di sini. Anda dapat memulihkannya kembali ke daftar aslinya.
+            </p>
+            <ul class="list-group list-group-flush" id="riwayat-hapus-list-container">
+                <!-- Konten di-render oleh renderDeletionHistory() -->
+                <li class="list-group-item d-flex justify-content-center p-4">
+                    <span class="text-muted">Memuat...</span>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer dihapus untuk Offcanvas, tidak lagi diperlukan -->
+    </div>
+
+
+    <!-- ======================================= -->
+    <!--      BARU: MODAL KONFIRMASI HAPUS       -->
+    <!-- ======================================= -->
+    <div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="konfirmasiHapusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="konfirmasiHapusModalLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="konfirmasiHapusModalBody">
+                    Anda yakin ingin menghapus item ini? Tindakan ini tidak dapat dibatalkan.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="btn-konfirmasi-hapus">Ya, Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================================= -->
+    <!--   BARU: Sidebar Akun (Offcanvas)        -->
+    <!-- ======================================= -->
+    <div class="offcanvas offcanvas-start" data-bs-theme="dark" tabindex="-1" id="sidebarAkun" aria-labelledby="sidebarAkunLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarAkunLabel">Daftar Akun</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <ul class="list-group list-group-flush" id="sidebar-akun-list-container">
+                <!-- Data akun akan dirender di sini oleh JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+
+    <nav class="navbar navbar-expand-lg bg-light fixed-bottom border-top">
+        <div class="container text-center">
+            <div class="d-flex justify-content-around w-100">
+                <a href="#page-dashboard" data-page="dashboard" data-title="Dashboard" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link active">
+                    <i class="bi bi-grid-fill nav-link-icon"></i>
+                    <span class="nav-link-text">Dashboard</span>
+                </a>
+                
+                <a href="#page-kasir" data-page="kasir" data-title="Kasir" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link">
+                    <i class="bi bi-calculator nav-link-icon"></i>
+                    <span class="nav-link-text">Kasir</span>
+                </a>
+                
+                <a href="#page-transaksi" data-page="transaksi" data-title="Transaksi" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link">
+                    <i class="bi bi-arrow-left-right nav-link-icon"></i>
+                    <span class="nav-link-text">Transaksi</span>
+                </a>
+                
+                <a href="#page-hutang" data-page="hutang" data-title="Hutang" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link">
+                    <i class="bi bi-journal-text nav-link-icon"></i>
+                    <span class="nav-link-text">Hutang</span>
+                </a>
+                
+                <!-- DIPERBAIKI: Atribut data-page dan data-title ditambahkan kembali -->
+                <a href="#page-laporan" data-page="laporan" data-title="Laporan" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link">
+                    <i class="bi bi-file-earmark-bar-graph nav-link-icon"></i>
+                    <span class="nav-link-text">Laporan</span>
+                </a>
+
+            </div>
+        </div>
+    </nav>
+
+  <!-- DIHAPUS: Skrip dipindahkan ke <head> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ...></script> -->
+  <!-- <script src="https://nusadua-hwp785xy2c.edgeone.app/app.js"></script> -->
+</body>
+</html>
