@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- DIPERBAIKI: Memindahkan Chart.js ke <head> untuk memastikan dimuat sebelum DOMContentLoaded -->
+    <!-- DIPERBAIKI: Memindahkan Chart.js ke <head> untukastikan dimuat sebelum DOMContentLoaded -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" crossorigin="anonymous"></script>
 
   <!-- DIKEMBALIKAN: Link CSS Bootstrap Icons (untuk navigasi) -->
@@ -17,19 +17,22 @@
 
   <!-- DIPERBARUI: Memanggil style.css dari URL eksternal -->
   <!-- DIUBAH: Link diubah ke GitHub -->
-  <link href="style.css" rel="stylesheet">
+  <!-- DIPERBAIKI: Link diubah ke jsDelivr CDN agar Content-Type-nya benar -->
+  <link href="https://cdn.jsdelivr.net/gh/damarpanuluh880-create/n2store@main/style.css" rel="stylesheet">
 
   <!-- 
     PERBAIKAN: Memindahkan skrip ke <head> dan menambahkan 'defer'.
     Ini memastikan HTML di-parse penuh sebelum JS dieksekusi, 
     memperbaiki error 'backdrop'
   -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha385-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <!-- DIPERBAIKI: Kesalahan ketik 'xintegrity' diubah menjadi 'integrity' -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha385-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
   
   <!-- DIPERBARUI: Memanggil 2 file JS. app-data.js HARUS dimuat terlebih dahulu -->
   <!-- DIUBAH: Link diubah ke GitHub -->
-  <script src="app-data.js"></script>
-  <script src="app.js"></script>
+  <!-- DIPERBAIKI: Link diubah ke jsDelivr CDN agar Content-Type-nya benar -->
+  <script src="https://cdn.jsdelivr.net/gh/damarpanuluh880-create/n2store@main/app-data.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/damarpanuluh880-create/n2store@main/app.js" defer></script>
 
 </head>
 <body>
@@ -456,43 +459,36 @@
                                     <!-- AKHIR BARU -->
                                     
                                     <!-- DIPERBAIKI: Grid 2x3 untuk sisa data -->
-                                    <div class="row mb-3">
+                                    <!-- DIUBAH: Diubah menjadi grid 3x2 -->
+                                    <div class="row mb-2">
                                         <div class="col-6">
-                                            <!-- DIPERBAIKI: Label diganti style-nya -->
                                             <small class="fw-semibold text-dark d-block">Produk Terjual</small>
-                                            <h5 class="mb-0" id="sales-qty">0</h5>
+                                            <h5 class="mb-0" id="sales-produk-qty">0</h5>
                                         </div>
                                         <div class="col-6">
-                                            <!-- DIPERBAIKI: Label diganti style-nya -->
-                                            <small class="fw-semibold text-dark d-block">Jasa Terjual</small>
-                                            <!-- BARU: ID baru untuk Jasa QTY -->
-                                            <h5 class="mb-0" id="sales-jasa-qty">0</h5> 
+                                             <small class="fw-semibold text-dark d-block">Jasa Terjual</small>
+                                             <h5 class="mb-0" id="sales-jasa-qty">0</h5>
                                         </div>
                                     </div>
-                                    
-                                    <div class="row mb-3">
+
+                                    <div class="row mb-2">
                                         <div class="col-6">
-                                             <!-- DIPERBAIKI: Label diganti style-nya -->
-                                            <small class="fw-semibold text-dark d-block">Produk</small>
+                                            <small class="fw-semibold text-dark d-block">Laba Produk</small>
                                             <h5 class="mb-0" id="sales-produk">Rp 0</h5>
                                         </div>
                                         <div class="col-6">
-                                             <!-- DIPERBAIKI: Label diganti style-nya -->
-                                            <small class="fw-semibold text-dark d-block">Aplikasi</small>
-                                            <h5 class="mb-0" id="sales-aplikasi">Rp 0</h5>
+                                             <small class="fw-semibold text-dark d-block">Laba Jasa</small>
+                                            <h5 class="mb-0" id="sales-jasa">Rp 0</h5>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-6">
-                                             <!-- DIPERBAIKI: Label diganti style-nya -->
-                                            <small class="fw-semibold text-dark d-block">Jasa</small>
-                                            <h5 class="mb-0" id="sales-jasa">Rp 0</h5>
+                                             <small class="fw-semibold text-dark d-block">Laba Aplikasi</small>
+                                            <h5 class="mb-0" id="sales-aplikasi">Rp 0</h5>
                                         </div>
                                         <div class="col-6">
-                                             <!-- DIPERBAIKI: Label diganti style-nya dan ID -->
-                                             <!-- DIUBAH: Label diubah dari 'Laba TRX' -->
-                                            <small class="fw-semibold text-dark d-block">Total TRX</small>
+                                             <small class="fw-semibold text-dark d-block">Trx.</small>
                                             <h5 class="mb-0" id="sales-tf">Rp 0</h5>
                                         </div>
                                     </div>
@@ -523,7 +519,8 @@
                                 <i class="bi bi-router fs-3 text-primary me-3"></i>
                                 <div>
                                     <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
-                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Produk</h6>
+                                    <!-- DIUBAH: Judul diubah -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Laba Produk</h6>
                                     <span class="h6 fw-bold card-text mb-0" id="sales-produk-h">Rp 0</span>
                                 </div>
                             </div>
@@ -537,7 +534,8 @@
                                 <i class="bi bi-laptop fs-3 text-info me-3"></i>
                                 <div>
                                     <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
-                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Jasa</h6>
+                                    <!-- DIUBAH: Judul diubah -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Laba Jasa</h6>
                                     <span class="h6 fw-bold card-text mb-0" id="sales-jasa-h">Rp 0</span>
                                 </div>
                             </div>
@@ -551,7 +549,8 @@
                                 <i class="bi bi-grid fs-3 text-success me-3"></i>
                                 <div>
                                     <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
-                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Penjualan Aplikasi</h6>
+                                    <!-- DIUBAH: Judul diubah -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Laba Aplikasi</h6>
                                     <span class="h6 fw-bold card-text mb-0" id="sales-apk-h">Rp 0</span>
                                 </div>
                             </div>
@@ -566,7 +565,8 @@
                                 <div>
                                     <!-- DIPERBAIKI: Menghapus .small dan menambah style inline -->
                                     <!-- DIUBAH: Judul diubah dari 'Total Laba TRX' -->
-                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Transaksi</h6>
+                                    <!-- DIUBAH: Judul diubah -->
+                                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">Total Trx.</h6>
                                     <!-- DIPERBAIKI: ID diubah -->
                                     <span class="h6 fw-bold card-text mb-0" id="sales-trx-h">Rp 0</span>
                                 </div>
@@ -1461,7 +1461,8 @@
                 </a>
                 
                 <a href="#page-hutang" data-page="hutang" data-title="Hutang" class="p-0 text-decoration-none text-secondary d-flex flex-column align-items-center nav-link">
-                    <i class="bi bi-journal-text nav-link-icon"></i>
+                    <!-- DIUBAH: Ikon diganti -->
+                    <i class="bi bi-receipt-cutoff nav-link-icon"></i>
                     <span class="nav-link-text">Hutang</span>
                 </a>
                 
