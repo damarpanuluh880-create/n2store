@@ -105,6 +105,34 @@
         <input type="file" id="import-json-input" accept=".json" class="d-none" style="display: none;">
 
 
+        <!-- ======================================= -->
+        <!--   BARU: FILTER TANGGAL DIPINDAHKAN KE SINI -->
+        <!-- ======================================= -->
+        <div class="my-4">
+            <div>
+                <!-- DIPERBAIKI: Mengganti justify-content-center dengan space-between -->
+                <div class="filter-nav d-flex justify-content-between align-items-center gap-2 w-100">
+                    <ul class="nav nav-pills" id="filter-tanggal-buttons">
+                        <li class="nav-item">
+                            <button class="nav-link" data-tipe="harian">Harian</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-tipe="mingguan">Mingguan</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link active" data-tipe="bulanan">Bulanan</button>
+                        </li>
+                    </ul>
+                    <div class="d-flex gap-2" id="filter-rentang-group">
+                        <input type="date" id="filter-start-date" class="form-control" title="Tanggal Mulai">
+                        <input type="date" id="filter-end-date" class="form-control" title="Tanggal Selesai">
+                        <button class="btn btn-secondary" id="filter-terapkan-btn" data-tipe="rentang">Terapkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <section id="page-dashboard" class="page-content active">
             <h2 class="h4 mb-3">Analisa Umum</h2>
 
@@ -141,10 +169,16 @@
                             <!-- Wrapper untuk teks -->
                             <div>
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="card-title mb-0">Total Cash</h6>
+                                    <!-- DIUBAH: Judul kartu diubah sesuai permintaan -->
+                                    <h6 class="card-title mb-0">Total Gabungan</h6>
                                     <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
                                     <span class="badge bg-white text-success rounded-pill" id="dashboard-cash-persen">+0.0%</span>
                                 </div>
+                                <!-- 
+                                    CATATAN PENGEMBANG: 
+                                    Elemen di bawah (dashboard-total-cash) perlu diisi oleh app.js 
+                                    dengan menjumlahkan saldo dari: Akun 'Cash', 'Laba Bersih', 'Tabungan', dan 'Modal'.
+                                -->
                                 <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
                                 <h2 class="h3 card-text my-2" id="dashboard-total-cash">Rp 0</h2>
                                 <!-- DIPERBAIKI: Menambahkan ID untuk update dinamis -->
@@ -276,30 +310,8 @@
             <!-- ======================================= -->
             <!--   BARU: FILTER TANGGAL                -->
             <!-- ======================================= -->
-            <!-- DIPERBAIKI: Menghapus 'justify-content-center' dan 'col-lg-10' -->
-            <div class="my-4">
-                <div>
-                    <!-- DIPERBAIKI: Mengganti justify-content-center dengan space-between -->
-                    <div class="filter-nav d-flex justify-content-between align-items-center gap-2 w-100">
-                        <ul class="nav nav-pills" id="filter-tanggal-buttons">
-                            <li class="nav-item">
-                                <button class="nav-link" data-tipe="harian">Harian</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-tipe="mingguan">Mingguan</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link active" data-tipe="bulanan">Bulanan</button>
-                            </li>
-                        </ul>
-                        <div class="d-flex gap-2" id="filter-rentang-group">
-                            <input type="date" id="filter-start-date" class="form-control" title="Tanggal Mulai">
-                            <input type="date" id="filter-end-date" class="form-control" title="Tanggal Selesai">
-                            <button class="btn btn-secondary" id="filter-terapkan-btn" data-tipe="rentang">Terapkan</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- DIPERBAIKI: Blok ini telah DIPINDAHKAN ke atas (di luar <section>) agar global -->
+            <!-- <div class="my-4"> ... (Konten filter yang lama ada di sini) ... </div> -->
 
 
             <!-- ======================================= -->
@@ -707,9 +719,91 @@
         </section>
 
         <section id="page-laporan" class="page-content">
-            <h2 class="h4 mb-3">Laporan Keuangan</h2>
-            <!-- Konten Laporan akan ditambahkan di sini -->
-            <p>Fitur laporan sedang dalam pengembangan.</p>
+            <h2 class="h4 mb-3">Laporan Laba Rugi</h2>
+            
+            <!-- Kartu Ringkasan Laba Bersih -->
+            <div class="card shadow-sm mb-4 bg-primary-subtle border-0">
+                <div class="card-body text-center p-4">
+                    <h6 class="card-title text-primary-emphasis">Total Laba Bersih</h6>
+                    <h2 class="display-6 fw-bold text-primary" id="laporan-total-laba-bersih">Rp 0</h2>
+                    <p class="text-muted mb-0" id="laporan-rentang-tanggal">Untuk rentang tanggal filter</p>
+                </div>
+            </div>
+
+            <!-- Kartu Rincian Pendapatan -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-success-subtle">
+                    <h5 class="mb-0 fw-bold text-success-emphasis">
+                        <i class="bi bi-graph-up-arrow me-2"></i>Pendapatan (Revenue)
+                    </h5>
+                </div>
+                <ul class="list-group list-group-flush" id="laporan-pendapatan-list">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-tag-fill text-muted me-3"></i>Laba Penjualan Produk</span>
+                        <span class="fw-bold text-success" id="laporan-laba-produk">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-tools text-muted me-3"></i>Laba Penjualan Jasa</span>
+                        <span class="fw-bold text-success" id="laporan-laba-jasa">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-grid-fill text-muted me-3"></i>Laba Penjualan Aplikasi</span>
+                        <span class="fw-bold text-success" id="laporan-laba-aplikasi">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-receipt-cutoff text-muted me-3"></i>Laba Penjualan TRX</span>
+                        <span class="fw-bold text-success" id="laporan-laba-trx">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-arrow-down-circle-fill text-muted me-3"></i>Pendapatan Lain</span>
+                        <span class="fw-bold text-success" id="laporan-pendapatan-lain">Rp 0</span>
+                    </li>
+                </ul>
+                <div class="card-footer d-flex justify-content-between align-items-center fw-bold">
+                    <span>Total Pendapatan</span>
+                    <span class="h5 mb-0 text-success" id="laporan-total-pendapatan">Rp 0</span>
+                </div>
+            </div>
+
+            <!-- Kartu Rincian Beban -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-danger-subtle">
+                    <h5 class="mb-0 fw-bold text-danger-emphasis">
+                        <i class="bi bi-graph-down-arrow me-2"></i>Beban (Expenses)
+                    </h5>
+                </div>
+                <ul class="list-group list-group-flush" id="laporan-beban-list">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-box-seam text-muted me-3"></i>Modal Penjualan Produk</span>
+                        <span class="fw-bold text-danger" id="laporan-modal-produk">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-tools text-muted me-3"></i>Modal Penjualan Jasa</span>
+                        <span class="fw-bold text-danger" id="laporan-modal-jasa">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-grid-fill text-muted me-3"></i>Modal Penjualan Aplikasi</span>
+                        <span class="fw-bold text-danger" id="laporan-modal-aplikasi">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-receipt-cutoff text-muted me-3"></i>Modal Penjualan TRX</span>
+                        <span class="fw-bold text-danger" id="laporan-modal-trx">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-house-door-fill text-muted me-3"></i>Pengeluaran Rumah</span>
+                        <span class="fw-bold text-danger" id="laporan-pengeluaran-rumah">Rp 0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-arrow-up-circle-fill text-muted me-3"></i>Pengeluaran Lain</span>
+                        <span class="fw-bold text-danger" id="laporan-pengeluaran-lain">Rp 0</span>
+                    </li>
+                </ul>
+                <div class="card-footer d-flex justify-content-between align-items-center fw-bold">
+                    <span>Total Beban</span>
+                    <span class="h5 mb-0 text-danger" id="laporan-total-beban">Rp 0</span>
+                </div>
+            </div>
+
         </section>
 
         <!-- DIPERBAIKI: Halaman Pengaturan diisi dengan konten baru -->
