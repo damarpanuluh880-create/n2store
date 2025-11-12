@@ -262,12 +262,22 @@ function loadDataFromLocalStorage() {
                 
                 // 2. Analisa Umum (Kartu Atas) - INI TIDAK DIFILTER (menampilkan total)
                 const totalSaldo = getTotalSaldoTunai(initialMasterData.akun);
+                
+                // === PERUBAHAN DIMULAI ===
+                // Logika "Total Gabungan" (Cash, Tabungan, Laba Bersih, Modal)
                 const totalCash = getAkunSaldo("Cash", initialMasterData.akun);
+                const totalTabungan = getAkunSaldo("Tabungan", initialMasterData.akun);
+                const totalLaba = getAkunSaldo("Laba Bersih", initialMasterData.akun);
+                const totalModal = getAkunSaldo("Modal", initialMasterData.akun);
+                const totalGabungan = totalCash + totalTabungan + totalLaba + totalModal;
+                // === PERUBAHAN SELESAI ===
+
                 // DIPERBAIKI: Mengambil saldo mentah (termasuk negatif) dari akun Hutang Piutang
                 const totalPiutang = getAkunSaldo("Hutang Piutang", initialMasterData.akun);
 
                 setValueById('dashboard-total-saldo', formatCurrency(totalSaldo));
-                setValueById('dashboard-total-cash', formatCurrency(totalCash));
+                // DIUBAH: Menggunakan 'totalGabungan' bukan 'totalCash'
+                setValueById('dashboard-total-cash', formatCurrency(totalGabungan));
                 setValueById('dashboard-total-piutang', formatCurrency(totalPiutang));
                 
                 // 3. Grafik Laba vs PR (Data dari Transaksi Terfilter)
