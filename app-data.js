@@ -1,118 +1,119 @@
-// =============================================
-// DEFINISI DATA APLIKASI
-// =============================================
+    // Skrip sederhana untuk navigasi antar halaman (tanpa reload)
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageContents = document.querySelectorAll('.page-content');
+            
+            // Mengatur halaman default (Dashboard) saat pertama kali dimuat
+            const initialPage = 'dashboard';
+            document.getElementById(`page-${initialPage}`).classList.remove('hidden');
+            document.querySelector(`.nav-link[data-page="${initialPage}"]`).classList.add('active');
 
-// BARU: Variabel global untuk menampung riwayat hapus
-// (Dimuat dari localStorage oleh app.js)
-let globalDeletionHistory = [];
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
 
-// Data Master (Disimpan di localStorage)
-// (Dimuat dari localStorage oleh app.js)
-let initialMasterData = {
-    produk: [
-        { id: 1, nama: "Materai 10k", modal: 10000, jual: 11000, stok: 50 },
-        { id: 2, nama: "Pulsa 10k", modal: 11000, jual: 11500, stok: 100 },
-        { id: 3, nama: "Pulsa 5k", modal: 6000, jual: 6500, stok: 100 },
-        { id: 4, nama: "Token 20k", modal: 20500, jual: 21000, stok: 50 },
-        { id: 5, nama: "Pulsa Telkomsel 5k", modal: 5200, jual: 7000, stok: 50 },
-        { id: 6, nama: "Pulsa Telkomsel 10k", modal: 10100, jual: 12000, stok: 45 },
-        { id: 7, nama: "Token Listrik 20k", modal: 20000, jual: 22000, stok: 30 },
-        { id: 8, nama: "Voucher Data Indosat 2GB", modal: 14000, jual: 17000, stok: 25 },
-        { id: 9, nama: "Case HP iPhone", modal: 25000, jual: 45000, stok: 15 },
-        { id: 10, nama: "Kabel Data Type-C", modal: 15000, jual: 25000, stok: 40 },
-    ],
-    kategori: [
-        "Order Kuota", "Dana", "Go-Pay", "Shopee-Pay", "Cash", "Modal", 
-        "Laba Bersih", "Fee BRI Link", "I-simple", "Digipos", "Hutang", 
-        "BNI", "BRI Nussa", "BRI Galih", "Pemasukan", "Pengeluaran", 
-        "Penyesuaian", "Penjualan ATK", "Service", "Tabungan", "Save Plus", 
-        "Pengeluaran Rumah", "Transfer", "Tarik Tunai", "Setor Tunai", "APK", 
-        "Kulak (SP/Voucher/HP/Sparepart/dll)", "Penjualan", "Penjualan Transaksi"
-    ],
-    akun: [
-        { id: 1, nama: "Cash", saldo: 1000000 },
-        { id: 2, nama: "BRI Galih", saldo: 1000000 },
-        { id: 3, nama: "BRI Nussa", saldo: 1000000 },
-        { id: 4, nama: "BNI", saldo: 1000000 },
-        { id: 5, nama: "Bank Jateng", saldo: 1000000 },
-        { id: 6, nama: "Buku Agen", saldo: 1000000 },
-        { id: 7, nama: "Dana Galih", saldo: 1000000 },
-        { id: 8, nama: "Dana Nussa", saldo: 1000000 },
-        { id: 9, nama: "Shopee Pay", saldo: 1000000 },
-        { id: 10, nama: "Go-Pay", saldo: 1000000 },
-        { id: 11, nama: "Order Kuota", saldo: 1000000 },
-        { id: 12, nama: "Digipos", saldo: 1000000 },
-        { id: 13, nama: "Save Plus", saldo: 1000000 },
-        { id: 14, nama: "I-Simple", saldo: 1000000 },
-        { id: 15, nama: "Tabungan", saldo: 1000000 },
-        { id: 16, nama: "Laba Bersih", saldo: 1000000 },
-        { id: 17, nama: "Fee BRI Link", saldo: 1000000 },
-        { id: 18, nama: "Hutang Piutang", saldo: 1000000 },
-        { id: 19, nama: "Modal", saldo: 1000000 },
-    ],
-    jenisTransaksi: [
-        "Pendapatan", "Pengeluaran", "Transfer", "BRI", "BNI", 
-        "Dana", "Go-Pay", "Shopee Pay", "Digipos", "I-simple", "Saveplus"
-    ],
-    pengguna: [
-        "Admin 1", "Admin 2"
-    ]
-};
+                    // 1. Sembunyikan semua halaman
+                    pageContents.forEach(page => {
+                        page.classList.add('hidden');
+                    });
 
-// Data Riwayat (Disimpan di localStorage)
-// (Dimuat dari localStorage oleh app.js)
-let initialHistoryData = {
-    penjualan: [
-        {
-            id: 1, tanggal: "2025-10-20", waktu: "19:30", tipe: "Produk", nama: "Pulsa 10k", 
-            kuantitas: 1, modal: 11000, laba: 500, total: 11500, color: "primary", produkId: 2, 
-            dariAkun: null, hargaJual: 11500
-        },
-        {
-            id: 2, tanggal: "2025-10-20", waktu: "19:35", tipe: "Jasa", nama: "Jasa Transfer BRI", 
-            kuantitas: 1, modal: 0, laba: 2500, total: 2500, color: "success", produkId: null, 
-            dariAkun: null, hargaJual: 2500
-        },
-        {
-            id: 3, tanggal: "2025-10-19", waktu: "10:15", tipe: "Aplikasi", nama: "Digipos", 
-            kuantitas: 1, modal: 50000, laba: 2000, total: 52000, color: "warning", produkId: null, 
-            dariAkun: "Digipos", hargaJual: 52000
-        },
-    ],
-    transaksi: [
-        {
-            id: 1, tanggal: "2025-10-20", waktu: "19:30", tipe: "TRX", jenis: "BRI", icon: "bi-bank", color: "primary",
-            rincian: "TRX BRI", catatan: "Biaya admin", kategori: "Penjualan Transaksi", 
-            dariAkun: "BRI Galih", keAkun: "Cash", fee: 5000, total: 1000000 // 'total' di sini adalah nominal modal
-        },
-        {
-            id: 2, tanggal: "2025-10-20", waktu: "19:30", tipe: "Pendapatan", jenis: "SHOPEE PAY", icon: "bi-shop", color: "warning",
-            rincian: "Masuk ke Shopee Pay", catatan: "Isi Saldo", kategori: "Pemasukan", 
-            dariAkun: null, keAkun: "Shopee Pay", fee: 0, total: 1000000
-        },
-        {
-            id: 3, tanggal: "2025-10-20", waktu: "19:30", tipe: "Pengeluaran", jenis: "ORDER KUOTA", icon: "bi-phone", color: "secondary",
-            rincian: "Keluar dari Cash", catatan: "Beli kuota", kategori: "Kulak (SP/Voucher/HP/Sparepart/dll)", 
-            dariAkun: "Cash", keAkun: null, fee: 0, total: 500000
-        },
-        {
-            id: 4, tanggal: "2025-10-19", waktu: "19:30", tipe: "Transfer", jenis: "BNI", icon: "bi-arrow-left-right", color: "info",
-            rincian: "Cash -> BNI", catatan: "Setor tunai", kategori: "Setor Tunai", 
-            dariAkun: "Cash", keAkun: "BNI", fee: 0, total: 1000000
-        },
-    ],
-    hutang: [
-        {
-            id: 1, tanggal: "2025-11-06", waktu: "14:30", tipe: "Piutang", icon: "bi-arrow-down", color: "success",
-            pihak: "Pelanggan A", sisa: 50000, total: 50000, jumlah: 50000, catatan: "Projek ABC", lunas: false
-        },
-        {
-            id: 2, tanggal: "2025-11-06", waktu: "11:00", tipe: "Hutang", icon: "bi-arrow-up", color: "danger",
-            pihak: "Supplier Pulsa", sisa: 1500000, total: 1500000, jumlah: 1500000, catatan: "Kulak pulsa", lunas: false
-        },
-        {
-            id: 3, tanggal: "2025-11-05", waktu: "16:00", tipe: "Hutang", icon: "bi-arrow-up", color: "danger",
-            pihak: "Supplier ATK", sisa: 100000, total: 300000, jumlah: 300000, catatan: "Beli buku", lunas: false
-        },
-    ]
-};
+                    // 2. Tampilkan halaman yang dituju
+                    const targetPage = document.getElementById(`page-${pageId}`);
+                    if (targetPage) {
+                        targetPage.classList.remove('hidden');
+                    }
+
+                    // 3. Perbarui style 'active' pada navigasi
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+
+            // --- BARU: Skrip untuk Sidebar KIRI ---
+            const hamburgerButton = document.getElementById('hamburger-button');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+            const sidebarCloseButton = document.getElementById('sidebar-close-button');
+
+            // Fungsi untuk membuka sidebar
+            const openSidebar = () => {
+                sidebarMenu.classList.add('open');
+            };
+            // Fungsi untuk menutup sidebar
+            const closeSidebar = () => {
+                sidebarMenu.classList.remove('open');
+            };
+            // Tambahkan event listener
+            hamburgerButton.addEventListener('click', openSidebar);
+            sidebarCloseButton.addEventListener('click', closeSidebar);
+            sidebarBackdrop.addEventListener('click', closeSidebar);
+            // --- AKHIR Skrip Sidebar KIRI ---
+            
+
+            // --- BARU: Skrip untuk Tab Halaman Transaksi ---
+            const transaksiTabs = document.querySelectorAll('.transaksi-tab');
+            const jurnalContent = document.getElementById('tab-content-jurnal');
+            const penjualanContent = document.getElementById('tab-content-penjualan');
+
+            transaksiTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Hapus 'active' dari semua tab
+                    transaksiTabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+                    // Tambah 'active' ke tab yang diklik
+                    tab.classList.add('active');
+                    tab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+
+                    // Tampilkan konten yang sesuai
+                    if (tab.dataset.tab === 'jurnal') {
+                        jurnalContent.classList.remove('hidden');
+                        penjualanContent.classList.add('hidden');
+                    } else if (tab.dataset.tab === 'penjualan') {
+                        jurnalContent.classList.add('hidden');
+                        penjualanContent.classList.remove('hidden');
+                    }
+                });
+            });
+            // --- AKHIR Skrip Tab Transaksi ---
+
+            // ======================================================
+            // BARU: Skrip untuk Sub-Navigasi Halaman Pengaturan
+            // ======================================================
+            const subNavLinks = document.querySelectorAll('.sub-nav-link');
+            const backToPengaturanButtons = document.querySelectorAll('.back-to-pengaturan-button');
+            const pagePengaturan = document.getElementById('page-pengaturan');
+
+            // Listener untuk Master Data links (e.g., "Kelola Kategori")
+            subNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    const targetPage = document.getElementById(`page-${pageId}`);
+                    
+                    if (targetPage) {
+                        // Sembunyikan semua halaman
+                        pageContents.forEach(page => page.classList.add('hidden'));
+                        // Tampilkan halaman sub-navigasi
+                        targetPage.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Listener for "Kembali" buttons
+            backToPengaturanButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Sembunyikan semua halaman
+                    pageContents.forEach(page => page.classList.add('hidden'));
+                    // Tampilkan halaman pengaturan utama
+                    pagePengaturan.classList.remove('hidden');
+                });
+            });
+            // --- AKHIR Skrip Sub-Navigasi ---
+
+        });
