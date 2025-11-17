@@ -1,36 +1,4 @@
-        // --- Fungsionalitas Navigasi Halaman ---
 
-        // Ambil semua elemen FAB (Floating Action Button)
-        const fabTransaksi = document.getElementById('fab-tambah-transaksi');
-        const fabProduk = document.getElementById('fab-tambah-produk');
-        const fabPenjualan = document.getElementById('fab-tambah-penjualan');
-        // Kumpulkan semua FAB dalam satu array untuk kemudahan pengelolaan
-        const allFabs = [fabTransaksi, fabProduk, fabPenjualan];
-
-        /**
-         * Mengatur visibilitas FAB (tombol +) berdasarkan halaman yang aktif.
-         * @param {string} activeViewId - ID dari view yang sedang aktif (cth: 'view-dashboard').
-         */
-        function updateFabVisibility(activeViewId) {
-            // Sembunyikan semua FAB terlebih dahulu
-            allFabs.forEach(fab => fab.style.display = 'none');
-
-            // Tampilkan FAB yang sesuai berdasarkan halaman aktif
-            switch (activeViewId) {
-                case 'view-transaksi':
-                    fabTransaksi.style.display = 'block'; // Tampilkan FAB Transaksi
-                    break;
-                case 'view-produk':
-                    fabProduk.style.display = 'block'; // Tampilkan FAB Produk
-                    break;
-                case 'view-kasir':
-                    fabPenjualan.style.display = 'block'; // Tampilkan FAB Penjualan
-                    break;
-                // 'view-dashboard', 'view-pengaturan', dll tidak menampilkan FAB
-                default:
-                    break;
-            }
-        }
 
         /**
          * Fungsi utama untuk navigasi antar halaman (main view).
