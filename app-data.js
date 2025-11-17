@@ -354,3 +354,100 @@
             listContainer.innerHTML = `<li class="list-group-item text-center text-danger p-3">Gagal memuat kategori: ${error.message}</li>`;
         }
     }
+
+// --- 9. IMPORT / EXPORT ---
+    
+    window.exportData = async () => {
+        try {
+            const [akuns, kategoris, transaksis, produks, penjualans] = await Promise.all([
+                dbGetAll('akun'),
+                dbGetAll('kategori'),
+                dbGetAll('transaksi'),
+                dbGetAll('produk'),
+                dbGetAll('penjualan')
+            ]);
+            
+            const data = {
+                akuns,
+                kategoris,
+                transaksis,
+                produks,
+                penjualans,
+                diExportPada: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_keuangan_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            tampilkanToast('Sukses', 'Data berhasil di-export.');
+            
+        } catch (error) {
+            tampilkanToast('Error', `Gagal export data: ${error.message}`, 'danger');
+        }
+    }
+    
+    window.triggerImport = () => {
+        importFileInput.click();
+    }
+    
+    importFileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            modalKonfirmasiImport.show();
+        }
+    });
+    
+    window.konfirmasiImport = () => {
+        const file = importFileInput.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                if (!data.akuns || !data.kategoris || !data.transaksis || !data.produks || !data.penjualans) {
+                    throw new Error('File JSON tidak valid atau format salah.');
+                }
+                
+                // Hapus data lama
+                const stores = ['akun', 'kategori', 'transaksi', 'produk', 'penjualan'];
+                const tx = db.transaction(stores, 'readwrite');
+                await Promise.all(stores.map(storeName => {
+                    return new Promise((resolve, reject) => {
+                        const store = tx.objectStore(storeName);
+                        const req = store.clear();
+                        req.onsuccess = resolve;
+                        req.onerror = reject;
+                    });
+                }));
+
+                // Tambah data baru
+                const tx2 = db.transaction(stores, 'readwrite');
+                await Promise.all([
+                    ...data.akuns.map(item => tx2.objectStore('akun').put(item)),
+                    ...data.kategoris.map(item => tx2.objectStore('kategori').put(item)),
+                    ...data.transaksis.map(item => tx2.objectStore('transaksi').put(item)),
+                    ...data.produks.map(item => tx2.objectStore('produk').put(item)),
+                    ...data.penjualans.map(item => tx2.objectStore('penjualan').put(item)),
+                ]);
+
+                tampilkanToast('Sukses', 'Data berhasil di-import dan dipulihkan!');
+                modalKonfirmasiImport.hide();
+                await loadSemuaData(); // Reload semua data
+                
+            } catch (error) {
+                 tampilkanToast('Error', `Gagal import data: ${error.message}`, 'danger');
+                 modalKonfirmasiImport.hide();
+            } finally {
+                importFileInput.value = null; // Reset file input
+            }
+        };
+        reader.readAsText(file);
+    }
