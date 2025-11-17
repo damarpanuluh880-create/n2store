@@ -1,102 +1,3 @@
-    // --- 3. FUNGSI HELPER & UTILITAS ---
-
-    /**
-     * Menghasilkan ID unik sederhana
-     */
-    const generateId = () => `id_${new Date().getTime()}_${Math.random().toString(36).substring(2, 9)}`;
-
-    /**
-     * Format angka menjadi string Rupiah (cth: Rp 1.000)
-     */
-    const formatRupiah = (angka, prefix = 'Rp ') => {
-        if (angka === null || isNaN(angka)) {
-            angka = 0;
-        }
-        let number_string = Math.abs(angka).toString().replace(/[^,\d]/g, ''),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substring(0, sisa),
-            ribuan = split[0].substring(sisa).match(/\d{3}/gi);
-
-        if (ribuan) {
-            let separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-
-        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-        
-        let formatted = prefix + rupiah;
-        return (angka < 0 ? `-${formatted}` : formatted);
-    };
-
-    /**
-     * Mendapatkan tanggal sekarang dalam format YYYY-MM-DDTHH:mm
-     */
-    const getWaktuSekarangISO = () => {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        return now.toISOString().slice(0, 16);
-    };
-    
-    /**
-     * Menampilkan notifikasi toast global
-     * @param {string} title - Judul toast
-     * @param {string} message - Isi pesan toast
-     * @param {string} type - 'success' (default) atau 'danger'
-     */
-    window.tampilkanToast = (title, message, type = 'success') => {
-        globalToastTitle.textContent = title;
-        globalToastBody.textContent = message;
-
-        // Reset classes
-        globalToastEl.classList.remove('text-bg-success', 'text-bg-danger');
-        globalToastIcon.classList.remove('bi-check-circle-fill', 'bi-exclamation-triangle-fill');
-
-        if (type === 'danger') {
-            globalToastEl.classList.add('text-bg-danger');
-            globalToastIcon.classList.add('bi-exclamation-triangle-fill');
-        } else {
-            globalToastEl.classList.add('text-bg-success');
-            globalToastIcon.classList.add('bi-check-circle-fill');
-        }
-
-        globalToast.show();
-    };
-
-// --- 5. FUNGSI NAVIGASI & TAMPILAN ---
-
-    /**
-     * Mengatur view (halaman) yang aktif
-     */
-    window.navigateTo = (viewId, navElement) => {
-        // Sembunyikan semua view
-        document.querySelectorAll('.main-view').forEach(view => {
-            view.classList.remove('active');
-        });
-
-        // Tampilkan view yang dipilih
-        const activeView = document.getElementById(viewId);
-        if (activeView) {
-            activeView.classList.add('active');
-        }
-
-        // Atur link nav-link yang aktif
-        document.querySelectorAll('#bottom-nav .nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        if (navElement) {
-            navElement.classList.add('active');
-        }
-
-        // Update visibilitas FAB
-        updateFabVisibility(viewId);
-
-        // Reset sub-view pengaturan jika keluar dari pengaturan
-        if (viewId !== 'view-pengaturan') {
-            showSettingSubView('view-settings-main');
-        }
-    }
-
     /**
      * Mengatur sub-view di halaman Pengaturan
      */
@@ -113,7 +14,34 @@
             subView.style.display = 'block';
         }
     }
-// --- 6.1. AKUN ---
+
+    /**
+     * Mengatur visibilitas FAB (tombol +) berdasarkan halaman yang aktif.
+     */
+    window.updateFabVisibility = (activeViewId) => {
+        // Sembunyikan semua FAB terlebih dahulu
+        allFabs.forEach(fab => fab.style.display = 'none');
+
+        // Tampilkan FAB yang sesuai berdasarkan halaman aktif
+        switch (activeViewId) {
+            case 'view-transaksi':
+                fabTransaksi.style.display = 'block'; // Tampilkan FAB Transaksi
+                break;
+            case 'view-produk':
+                fabProduk.style.display = 'block'; // Tampilkan FAB Produk
+                break;
+            case 'view-kasir':
+                fabPenjualan.style.display = 'block'; // Tampilkan FAB Penjualan
+                break;
+            // 'view-dashboard', 'view-pengaturan', dll tidak menampilkan FAB
+            default:
+                break;
+        }
+    }
+
+    // --- 6. LOGIKA INTI APLIKASI (MODAL & CRUD) ---
+
+    // --- 6.1. AKUN ---
 
     /**
      * Menyiapkan modal untuk menambah akun baru
