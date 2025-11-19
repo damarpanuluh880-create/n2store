@@ -1,395 +1,43 @@
+ html {
+            font-size: clamp(16px, 1.5vw + 0.25rem, 20px);
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f0f2f5;
-            /* Warna latar belakang sedikit abu-abu */
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-item.active svg,
+        .nav-item.active .nav-text {
+            color: #0ea5e9; /* sky-500 */
         }
 
-        /* --- WARNA HEADER KUSTOM --- */
-        .bg-biru-tua {
-            background-color: #192a56;
-            /* Biru Dongker / Navy */
+        /* --- Animasi Transisi Halaman --- */
+        @keyframes page-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* --- CONTAINER WRAPPER --- */
-        /* Mengatur lebar halaman berdasarkan orientasi */
-        .main-container-wrapper {
-            transition: width 0.2s ease-in-out, margin-left 0.2s ease-in-out;
-            padding-top: 56px;
-            /* Padding untuk fixed-top header */
+        .page, .sub-page, .modal-container { display: none; }
+
+        .page.active { 
+            display: block; 
+            animation: page-fade-in 0.3s ease-out;
         }
-
-        /* --- MAIN CONTENT AREA --- */
-        /* Area konten utama yang akan diisi */
-        main.content-area {
-            /* Transisi untuk penyesuain margin */
-            transition: margin-left 0.2s ease-in-out, width 0.2s ease-in-out;
-            margin-bottom: 90px;
-        }
-
-        /* Sembunyikan semua main view secara default */
-        .main-view {
-            display: none;
-        }
-
-        /* Tampilkan view yang aktif */
-        .main-view.active {
-            display: block;
-        }
-
-
-        /* Styling untuk daftar akun di sidebar (sekarang hanya di offcanvas) */
-        .sidebar-akun-list {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-
-        .sidebar-akun-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .sidebar-akun-item:last-child {
-            border-bottom: none;
-        }
-
-        .sidebar-akun-nama {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .sidebar-akun-saldo {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-
-        /* --- NAVIGASI BAWAH (Footer) --- */
-        #bottom-nav {
-            background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
-            min-height: 49px;
-            padding: 0;
-        }
-
-        #bottom-nav .nav-link {
+        .sub-page.active { 
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: #6c757d;
-            padding-top: 6px;
-            padding-bottom: 6px;
-            height: 100%;
+            animation: page-fade-in 0.3s ease-out;
         }
-
-        #bottom-nav .nav-link i {
-            font-size: 1.2rem;
-            line-height: 1;
-        }
-
-        #bottom-nav .nav-link.active {
-            color: #0d6efd;
-        }
-
-/* --- HALAMAN TRANSAKSI --- */
-        .transaksi-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 2.5fr 2.5fr 1.5fr 0.4fr;
-            gap: 0px;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-
-        .transaksi-grid>div:nth-child(2) {
-            padding-left: 15px;
-        }
-
-        .transaksi-grid>div:nth-child(3),
-        .transaksi-grid>div:nth-child(4),
-        .transaksi-grid>div:nth-child(5) {
-            padding-left: 8px;
-        }
-
-        /* Penyesuaian untuk tampilan transfer */
-        .col-jenis-transfer {
+        .modal-container.active { 
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            font-size: 0.85rem;
         }
-
-        /* Warna khusus akun untuk halaman transaksi */
-        .text-akun-cash { color: #20c997; }
-        .text-akun-brigalih { color: #007bff; }
-        .text-akun-brinussa { color: #0056b3; }
-        .text-akun-bni { color: #ff6347; }
-        .text-akun-bankjateng { color: #6f42c1; }
-        .text-akun-bukuagen { color: #fd7e14; }
-        .text-akun-danagalih { color: #108EE9; }
-        .text-akun-dananussa { color: #1069E9; }
-        .text-akun-shopeepay { color: #EE4D2D; }
-        .text-akun-gopay { color: #0081a0; }
-        .text-akun-orderkuota { color: #6610f2; }
-        .text-akun-digipos { color: #dc3545; }
-        .text-akun-saveplus { color: #28a745; }
-        .text-akun-isimple { color: #ffc107; }
-        .text-akun-tabungan { color: #17a2b8; }
-        .text-akun-lababersih { color: #20c997; }
-        .text-akun-feebrilink { color: #0d6efd; }
-        .text-akun-hutangpiutang { color: #dc3545; }
-        .text-akun-modal { color: #6c757d; }
-
-
-        /* Warna untuk total */
-        .text-pemasukan {
-            color: #198754;
-            /* Hijau */
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
         }
-
-        .text-pengeluaran {
-            color: #dc3545;
-            /* Merah */
-        }
-
-        /* Garis pemisah tanggal */
-        .date-separator {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .date-separator::before,
-        .date-separator::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .date-separator:not(:empty)::before {
-            margin-right: .5em;
-        }
-
-        .date-separator:not(:empty)::after {
-            margin-left: .5em;
-        }
-
-        .date-separator-text {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #6c757d;
-            background-color: #f0f2f5;
-            padding: 0 8px;
-        }
-
-        /* Tombol aksi di daftar transaksi */
-        .transaksi-aksi a {
-            font-size: 0.8rem;
-            text-decoration: none;
-        }
-
-        /* Tombol FAB (Floating Action Button) */
-        #fab-tambah-transaksi, #fab-tambah-produk, #fab-tambah-penjualan {
-            position: fixed;
-            bottom: 65px;
-            /* Di atas nav bawah */
-            right: 16px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            z-index: 1030;
-            /* Di bawah modal tapi di atas konten */
-            display: none;
-            /* Sembunyi by default */
-        }
-
-
-        /* --- HALAMAN PRODUK --- */
-        .produk-grid {
-            display: grid;
-            grid-template-columns: 3fr 2fr 2fr 1fr 0.4fr;
-            gap: 0px;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-        .produk-grid > div:nth-child(2),
-        .produk-grid > div:nth-child(3),
-        .produk-grid > div:nth-child(4),
-        .produk-grid > div:nth-child(5) {
-            padding-left: 8px;
-        }
-        .produk-grid .col-stok { font-weight: bold; }
-
-        /* --- HALAMAN KASIR (PENJUALAN) --- */
-        .penjualan-grid {
-            display: grid;
-            grid-template-columns: 1fr 3fr 1.5fr 1.5fr 1.5fr 0.4fr;
-            gap: 0px;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-        .penjualan-grid > div { padding-left: 8px; }
-        .penjualan-grid > div:first-child { padding-left: 0; }
-        .text-laba-positif { color: #198754; }
-        .text-laba-negatif { color: #dc3545; }
-
-
-        /* --- ATURAN RESPONSIVE (Orientasi & Ukuran) --- */
-
-        /* 1. Mode Portrait (Layar Kecil / HP / Tablet Tegak) */
-        @media (orientation: portrait) {
-            body {
-                padding-top: 56px;
-            }
-
-            /* Container utama 100% di mode portrait */
-            .main-container-wrapper {
-                width: 100%;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            /* Area konten 100% (dari 100% wrapper) */
-            main.content-area {
-                width: 100%;
-                margin-left: 0;
-                padding-bottom: 160px;
-                /* Padding untuk fixed-bottom footer */
-            }
-
-            /* Header & Footer 100% */
-            header,
-            footer {
-                width: 100%;
-                left: 0;
-            }
-
-            /* Buat grid transaksi jadi vertikal di HP */
-            .transaksi-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 12px;
-                border: none;
-                font-size: 0.9rem;
-            }
-
-            .transaksi-grid>div:nth-child(2),
-            .transaksi-grid>div:nth-child(3),
-            .transaksi-grid>div:nth-child(4),
-            .transaksi-grid>div:nth-child(5) {
-                padding-left: 0;
-            }
-
-            /* Sembunyikan header tabel di portrait */
-            #transaksi-header, #produk-header, #penjualan-header {
-                display: none;
-            }
-
-            /* Tata ulang item di portrait */
-            .transaksi-grid>div, .produk-grid>div, .penjualan-grid>div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-bottom: 4px;
-                border-bottom: 1px dashed #eee;
-            }
-
-            .card-body.transaksi-grid, .card-body.produk-grid, .card-body.penjualan-grid {
-                border-bottom: none;
-            }
-
-            .card-body .transaksi-grid, .card-body .produk-grid, .card-body .penjualan-grid {
-                border-bottom: none;
-            }
-
-            .transaksi-grid>div:last-child, .produk-grid>div:last-child, .penjualan-grid>div:last-child {
-                border-bottom: none;
-                padding-bottom: 0;
-            }
-
-            /* Label untuk TRANSAKSI */
-            .transaksi-grid .col-jenis::before { content: 'Tipe: '; font-weight: 600; }
-            .transaksi-grid .col-rincian::before { content: 'Akun: '; font-weight: 600; }
-            .transaksi-grid .col-kategori::before { content: 'Kategori: '; font-weight: 600; }
-            .transaksi-grid .col-total::before { content: 'Total: '; font-weight: 600; }
-            .transaksi-grid .col-aksi::before { content: 'Aksi: '; font-weight: 600; }
-            .transaksi-grid .col-rincian, .transaksi-grid .col-aksi {
-                flex-direction: column; align-items: flex-end; text-align: right;
-            }
-            .transaksi-grid .col-rincian::before {
-                display: block; width: 100%; text-align: left;
-            }
-            .transaksi-grid .col-rincian .col-jenis-transfer,
-            .transaksi-grid .col-rincian .fw-bold { width: 100%; text-align: right; }
-            .transaksi-grid .col-rincian .small { font-size: 0.8rem; width: 100%; }
-            .transaksi-grid .col-aksi { flex-direction: row; justify-content: space-between; }
-
-            /* Label untuk PRODUK */
-             .produk-grid { grid-template-columns: 1fr; gap: 8px; padding: 12px; border: none; }
-             .produk-grid > div { padding-left: 0 !important; }
-            .produk-grid .col-nama::before { content: 'Nama Produk: '; font-weight: 600; }
-            .produk-grid .col-harga-modal::before { content: 'Harga Modal: '; font-weight: 600; }
-            .produk-grid .col-harga-jual::before { content: 'Harga Jual: '; font-weight: 600; }
-            .produk-grid .col-stok::before { content: 'Stok: '; font-weight: 600; }
-            .produk-grid .col-aksi-produk::before { content: 'Aksi: '; font-weight: 600; }
-
-            /* Label untuk PENJUALAN */
-            .penjualan-grid { grid-template-columns: 1fr; gap: 8px; padding: 12px; border: none; }
-            .penjualan-grid > div { padding-left: 0 !important; }
-            .penjualan-grid .col-penjualan-tipe::before { content: 'Tipe: '; font-weight: 600; }
-            .penjualan-grid .col-penjualan-deskripsi::before { content: 'Deskripsi: '; font-weight: 600; }
-            .penjualan-grid .col-penjualan-akun::before { content: 'Akun: '; font-weight: 600; }
-            .penjualan-grid .col-penjualan-nominal::before { content: 'Nominal: '; font-weight: 600; }
-            .penjualan-grid .col-penjualan-laba::before { content: 'Laba: '; font-weight: 600; }
-            .penjualan-grid .col-penjualan-aksi::before { content: 'Aksi: '; font-weight: 600; }
-
-            .penjualan-grid .col-penjualan-deskripsi,
-            .penjualan-grid .col-penjualan-akun,
-            .penjualan-grid .col-penjualan-nominal {
-                 flex-direction: column; align-items: flex-end; text-align: right;
-            }
-             .penjualan-grid .col-penjualan-deskripsi::before,
-             .penjualan-grid .col-penjualan-akun::before,
-             .penjualan-grid .col-penjualan-nominal::before {
-                display: block; width: 100%; text-align: left;
-             }
-        }
-
-
-        /* 2. Mode Landscape (Layar Sedang / Tablet Miring / Desktop) */
-        @media (orientation: landscape) {
-
-            body {
-                padding-top: 0;
-            }
-
-            /* Container utama 100% */
-            .main-container-wrapper {
-                width: 100%;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            /* Area konten 100% dari wrapper 100% */
-            main.content-area {
-                width: 100%;
-                margin-left: 0;
-                padding-bottom: 160px;
-                /* Padding untuk fixed-bottom footer */
-            }
-
-            /* Header & Footer 100% */
-            header,
-            footer {
-                width: 100%;
-                left: 0;
-            }
-
-            /* Pastikan header transaksi tampil di landscape */
-            #transaksi-header, #produk-header, #penjualan-header {
-                display: block;
-            }
-        }
+        .form-field { display: block; }
+        .form-field.hidden { display: none; }
