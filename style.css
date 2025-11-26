@@ -1,43 +1,155 @@
- html {
-            font-size: clamp(16px, 1.5vw + 0.25rem, 20px);
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .nav-item.active svg,
-        .nav-item.active .nav-text {
-            color: #0ea5e9; /* sky-500 */
-        }
-
-        /* --- Animasi Transisi Halaman --- */
-        @keyframes page-fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .page, .sub-page, .modal-container { display: none; }
-
-        .page.active { 
-            display: block; 
-            animation: page-fade-in 0.3s ease-out;
-        }
-        .sub-page.active { 
-            display: flex;
-            animation: page-fade-in 0.3s ease-out;
-        }
-        .modal-container.active { 
-            display: flex;
+        .h-dynamic { height: 100vh; height: 100dvh; }
+        
+        /* GLASS PANEL TERANG */
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 4px 20px rgba(148, 163, 184, 0.1); 
         }
         
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.5);
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            box-shadow: 0 2px 10px rgba(148, 163, 184, 0.05);
         }
-        .form-field { display: block; }
-        .form-field.hidden { display: none; }
+
+        .glass-drawer { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px); 
+            border-right: 1px solid rgba(226, 232, 240, 1); 
+            box-shadow: 10px 0 40px rgba(148, 163, 184, 0.2); 
+        }
+        
+        .glass-drawer-right { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(20px); 
+            border-left: 1px solid rgba(226, 232, 240, 1); 
+            box-shadow: -10px 0 40px rgba(148, 163, 184, 0.2); 
+        }
+        
+        /* INPUT TERANG */
+        .glass-input { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            color: #1e293b; 
+        }
+        .glass-input:focus { 
+            background: #fff; 
+            border-color: #6366f1; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        .glass-input option { background-color: #fff; color: #1e293b; }
+        
+        /* NAVIGASI TERANG */
+        .nav-link.active { 
+            background-color: #eff6ff; 
+            color: #4f46e5; 
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1); 
+            transform: scale(1.05); 
+            border: 1px solid #e0e7ff;
+        }
+        .nav-link:not(.active) { color: #94a3b8; }
+        .nav-link:not(.active):hover { color: #64748b; background-color: #f1f5f9; }
+
+        /* TOMBOL TRANSAKSI */
+        .trx-btn.active-in { background-color: #ecfdf5; border-color: #10b981; color: #059669; }
+        .trx-btn.active-out { background-color: #fff1f2; border-color: #f43f5e; color: #e11d48; }
+        .trx-btn.active-tf { background-color: #eff6ff; border-color: #3b82f6; color: #2563eb; }
+        .trx-btn.active-trx { background-color: #fff7ed; border-color: #f97316; color: #ea580c; }
+        
+        /* TABS */
+        .setting-tab.active { background-color: transparent; border-bottom: 2px solid #6366f1; color: #4f46e5; font-weight: 600; }
+        .manual-tab.active { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .text-gradient { background: linear-gradient(to right, #4f46e5, #9333ea, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        
+        .hide-scroll::-webkit-scrollbar { display: none; } .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .snap-x-mandatory { scroll-snap-type: x mandatory; } .snap-center { scroll-snap-align: center; }
+        .print-area { font-family: 'Courier New', Courier, monospace; line-height: 1.5; }
+        .cursor-grab { cursor: grab; }
+        .cursor-grabbing { cursor: grabbing; }
+        
+        /* STYLE KHUSUS GOPAY STYLE */
+        .gopay-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); 
+            margin-bottom: 2rem; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .gopay-item {
+            padding: 1.25rem 1rem; 
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #f1f5f9; 
+            background-color: white;
+            transition: background-color 0.2s;
+            position: relative;
+            cursor: pointer; 
+        }
+        .gopay-item:hover { background-color: #f8fafc; }
+        .gopay-item:active { background-color: #f1f5f9; transform: scale(0.995); }
+        .gopay-date-header {
+            font-size: 0.85rem; 
+            font-weight: 600;
+            color: #334155; 
+            margin-bottom: 0.75rem;
+            margin-left: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Override gopay style for DARK DASHBOARD */
+        .panel-dark .gopay-card {
+            background-color: #1e293b; 
+            border: 1px solid #334155;
+            box-shadow: none;
+        }
+        .panel-dark .gopay-item {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        .panel-dark .gopay-item:hover { background-color: #334155; }
+        .panel-dark .gopay-date-header { color: #94a3b8; font-size: 0.75rem; margin-top: 1rem;}
+        .panel-dark .gopay-item h4 { color: #e2e8f0; }
+        .panel-dark .gopay-item p { color: #94a3b8; }
+
+         /* DARK CARD STYLES (Left Column) */
+         .card-dark {
+            background-color: #1e293b; 
+            border-radius: 1.5rem;
+            border: 1px solid #334155;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        .card-dark-icon {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast-container {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100; pointer-events: none;
+        }
+        .toast {
+            background: #1e293b; color: white; padding: 10px 20px; border-radius: 50px; font-size: 14px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; transform: translateY(20px); transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px; pointer-events: auto; margin-top: 10px;
+        }
